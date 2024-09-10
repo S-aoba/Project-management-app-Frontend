@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useCsrfToken } from './use-csrf-token'
 
 type LoginProps = {
-  email: string,
+  email: string
   password: string
 }
 
@@ -42,5 +42,26 @@ export const useAuth = () => {
     },
   })
 
-  return { login }
+  const { mutate: logout, isPending: isLogoutPending } = useMutation({
+    mutationKey: ['logout'],
+    mutationFn: async () => {
+      await csrfToken()
+
+      const csrf = getCsrfToken()
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-XSRF-TOKEN': csrf!,
+        },
+      })
+    },
+    onSuccess: () => {
+      window.location.pathname = '/login'
+    },
+  })
+
+  return { login, logout }
 }
