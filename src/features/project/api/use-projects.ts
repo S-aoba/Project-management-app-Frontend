@@ -11,8 +11,9 @@ type ResponseType = {
 export const useProjects = () => {
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
-  const { data } = useQuery<ResponseType>({
+  const { data, isLoading } = useQuery<ResponseType>({
     queryKey: ['userProjects'],
+    placeholderData: { data: [] },
     queryFn: async () => {
       await csrfToken()
 
@@ -36,5 +37,5 @@ export const useProjects = () => {
     },
   })
 
-  return { data }
+  return { data, isLoading }
 }

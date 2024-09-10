@@ -18,7 +18,7 @@ import { useCreateProjectModal } from '../store/use-create-project-modal'
 export const CreateProjectModal = () => {
   const { mutate, isPending } = useCreateProject()
 
-  const [open, _] = useCreateProjectModal()
+  const [open, setOpen] = useCreateProjectModal()
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -28,6 +28,8 @@ export const CreateProjectModal = () => {
     setName('')
     setDescription('')
     setDate(undefined)
+
+    setOpen(false)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
