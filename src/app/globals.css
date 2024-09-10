@@ -8,10 +8,11 @@ body {
   height: 100%;
 }
 
-:root {
+/* modalの背景色が変になるのでコメントアウト */
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
-}
+} */
 
 @media (prefers-color-scheme: dark) {
   :root {
