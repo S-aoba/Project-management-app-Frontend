@@ -1,23 +1,28 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+
+import { useAuth } from '../api/use-auth'
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = () =>{}
+  const { login } = useAuth()
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    login({
+      email,
+      password
+    })
+  }
 
   return (
     <Card className='w-full h-full p-8'>
@@ -45,11 +50,7 @@ export const LoginForm = () => {
             type='password'
             required
           />
-          <Button
-            type='submit'
-            className='w-full'
-            size='lg'
-            disabled={false}>
+          <Button type='submit' className='w-full' size='lg' disabled={false}>
             Login
           </Button>
         </form>
