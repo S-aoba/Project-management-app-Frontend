@@ -11,43 +11,43 @@ export const useCreateProject = () => {
 
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
-  const { mutate, isPending } = useMutation({
+  const createProject = async ({ ...props }: RequestType) => {
+    await csrfToken()
+
+    const csrf = getCsrfToken()
+
+    const projectData = {
+      name: props.name,
+      description: props.description,
+      due_date: props.dueDate,
+      status: props.status,
+      image_path: props.imagePath,
+    }
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/projects`, {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify(projectData),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-XSRF-TOKEN': csrf!,
+      },
+    })
+
+    if (!res.ok) {
+      throw new Error('Unauthenticated.')
+    }
+
+    return res.json()
+  }
+
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationKey: ['creatProject'],
-    mutationFn: async ({ ...props }: RequestType) => {
-      await csrfToken()
-
-      const csrf = getCsrfToken()
-
-      const projectData = {
-        name: props.name,
-        description: props.description,
-        due_date: props.dueDate,
-        status: props.status,
-        image_path: props.imagePath,
-      }
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/projects`, {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify(projectData),
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'X-XSRF-TOKEN': csrf!,
-        },
-      })
-
-      if (!res.ok) {
-        throw new Error('Unauthenticated.')
-      }
-
-      return await res.json()
-    },
-    onSuccess(data) {
-      queryClient.invalidateQueries({
-        queryKey: ['userProjects'],
-      })
+    mutationFn: (props: RequestType) => createProject(props),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['userProjects'] })
     },
   })
-  return { mutate, isPending }
+  return { mutate, isPending, isSuccess }
 }

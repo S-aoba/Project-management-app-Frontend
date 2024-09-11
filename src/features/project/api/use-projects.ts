@@ -11,31 +11,32 @@ type ResponseType = {
 export const useProjects = () => {
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
-  const { data, isLoading } = useQuery<ResponseType>({
+  const fetchProject = async () => {
+    await csrfToken()
+
+    const csrf = getCsrfToken()
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/user/projects`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-XSRF-TOKEN': csrf!,
+      },
+    })
+
+    if (!res.ok) {
+      throw new Error('Unauthenticated.')
+    }
+
+    return res.json()
+  }
+
+  const { data, isLoading, isFetched, status } = useQuery<ResponseType>({
     queryKey: ['userProjects'],
-    placeholderData: { data: [] },
-    queryFn: async () => {
-      await csrfToken()
-
-      const csrf = getCsrfToken()
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/user/projects`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'X-XSRF-TOKEN': csrf!,
-        },
-      })
-
-      if (!res.ok) {
-        throw new Error('Unauthenticated.')
-      }
-
-      return res.json()
-    },
+    queryFn: fetchProject,
   })
 
-  return { data, isLoading }
+  return { data, isLoading, isFetched, status }
 }
