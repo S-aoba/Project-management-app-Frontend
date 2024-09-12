@@ -5,13 +5,16 @@ import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 import { Project } from '@/types/type'
 
 type RequestType = Pick<Project, 'name' | 'description' | 'status' | 'dueDate' | 'imagePath'>
+type ResponseType = {
+  data: Project
+}
 
 export const useCreateProject = () => {
   const queryClient = useQueryClient()
 
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
-  const createProject = async ({ ...props }: RequestType) => {
+  const createProject = async ({ ...props }: RequestType): Promise<ResponseType> => {
     await csrfToken()
 
     const csrf = getCsrfToken()
