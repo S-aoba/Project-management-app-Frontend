@@ -15,6 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 
+import { useEditProject } from '../api/use-edit-project'
 import { useProject } from '../api/use-project'
 import { useEditProjectSheet } from '../store/use-edit-project-sheet'
 
@@ -22,6 +23,7 @@ export const EditProjectSheet = () => {
   const params = useParams()
   const projectId = Number(params.projectId)
   const { data } = useProject(projectId)
+  const { mutate, isPending } = useEditProject(projectId)
 
   const [open, setOpen] = useEditProjectSheet()
 
@@ -40,7 +42,29 @@ export const EditProjectSheet = () => {
   }, [data])
 
   const handleClose = () => {
+    setName('')
+    setDescription('')
+    setStatus('pending')
+    setDate(undefined)
+
     setOpen(false)
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (date === undefined) return
+    const dueDate = format(date, 'yyyy-MM-dd')
+
+    mutate({
+      name,
+      description: description || '',
+      status,
+      dueDate,
+      imagePath: null,
+    })
+
+    handleClose()
   }
 
   return (
@@ -50,12 +74,12 @@ export const EditProjectSheet = () => {
           <SheetTitle>Edit Project</SheetTitle>
           <SheetDescription />
         </SheetHeader>
-        <form className='space-y-4' onSubmit={() => {}}>
+        <form className='space-y-4' onSubmit={handleSubmit}>
           <Input
             defaultValue={data?.project.name}
             name={name}
             onChange={(e) => setName(e.target.value)}
-            disabled={false}
+            disabled={isPending}
             required
             autoFocus
             minLength={3}
@@ -65,7 +89,7 @@ export const EditProjectSheet = () => {
             defaultValue={data?.project.description || ''}
             name={description || ''}
             onChange={(e) => setDescription(e.target.value)}
-            disabled={false}
+            disabled={isPending}
             required
             minLength={3}
             placeholder='Project Description'
@@ -87,7 +111,7 @@ export const EditProjectSheet = () => {
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                disabled={false}
+                disabled={isPending}
                 variant={'outline'}
                 className={cn('w-[280px] justify-start text-left font-normal', !date && 'text-muted-foreground')}>
                 <CalendarIcon className='mr-2 h-4 w-4' />
@@ -99,10 +123,10 @@ export const EditProjectSheet = () => {
             </PopoverContent>
           </Popover>
           <div className='flex justify-end space-x-4'>
-            <Button variant={'outline'} type='button' disabled={false} onClick={() => handleClose()}>
+            <Button variant={'outline'} type='button' disabled={isPending} onClick={() => handleClose()}>
               Cancel
             </Button>
-            <Button disabled={false}>Edit</Button>
+            <Button disabled={isPending}>Edit</Button>
           </div>
         </form>
       </SheetContent>
