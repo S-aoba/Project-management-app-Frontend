@@ -4,9 +4,12 @@ import { useParams } from 'next/navigation'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-
 import { Skeleton } from '@/components/ui/skeleton'
+
+import { useDeleteProject } from '../api/use-delete-project'
 import { useProject } from '../api/use-project'
+
+import { useConfirm } from '@/hooks/use-confirm'
 
 export const ProjectHeader = () => {
   const params = useParams()
@@ -14,9 +17,22 @@ export const ProjectHeader = () => {
 
   const { data, isPending } = useProject(projectId)
 
+  const { mutate, isPending: isDeletePending } = useDeleteProject()
+
+  const [ConfirmDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
+
+  const handleDelete = async () => {
+    const ok = await confirm()
+
+    if (ok) {
+      mutate(projectId)
+    }
+  }
+
   return (
     <>
-      {isPending ? (
+      <ConfirmDialog />
+      {isPending ? ( 
         <div className='py-8 border-b'>
           <div className='flex items-center justify-start space-x-4 border-b px-2 pb-2'>
             <Skeleton className='w-20 h-4 bg-slate-300' />
@@ -42,10 +58,10 @@ export const ProjectHeader = () => {
             <h1 className='text-2xl text-foreground'>{data?.project.name}</h1>
             <Badge variant={'default'}>{data?.project.status}</Badge>
             <p className='text-sm text-muted-foreground'>{data?.project.dueDate}</p>
-            <Button size={'sm'} variant={'outline'} onClick={() => {}}>
+            <Button disabled={isPending || isDeletePending} size={'sm'} variant={'outline'} onClick={() => {}}>
               Edit Project
             </Button>
-            <Button size={'sm'} variant={'destructive'} onClick={() => {}}>
+            <Button disabled={isPending || isDeletePending} size={'sm'} variant={'destructive'} onClick={handleDelete}>
               Delete Project
             </Button>
           </div>
