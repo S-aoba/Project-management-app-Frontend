@@ -15,7 +15,7 @@ export const useProjects = () => {
     await csrfToken()
 
     const csrf = getCsrfToken()
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/user/projects`, {
       method: 'GET',
       credentials: 'include',
