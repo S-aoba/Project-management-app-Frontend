@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
 import { Modals } from '@/components/modals'
+import { Sheets } from '@/components/sheets'
 
 import './globals.css'
 
@@ -11,13 +12,13 @@ const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
   weight: '100 900',
-  preload: false
+  preload: false,
 })
 const geistMono = localFont({
   src: './fonts/GeistMonoVF.woff',
   variable: '--font-geist-mono',
   weight: '100 900',
-  preload: false
+  preload: false,
 })
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <QueryProvider>
           <Modals />
+          <Sheets />
           {children}
         </QueryProvider>
       </body>
