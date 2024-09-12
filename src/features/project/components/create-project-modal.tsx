@@ -2,6 +2,7 @@
 
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -16,6 +17,8 @@ import { useCreateProject } from '../api/use-create-project'
 import { useCreateProjectModal } from '../store/use-create-project-modal'
 
 export const CreateProjectModal = () => {
+  const router = useRouter()
+
   const { mutate, isPending } = useCreateProject()
 
   const [open, setOpen] = useCreateProjectModal()
@@ -38,15 +41,23 @@ export const CreateProjectModal = () => {
     if (date === undefined) return
     const dueDate = format(date, 'yyyy-MM-dd')
 
-    mutate({
-      name,
-      description,
-      status: 'pending',
-      dueDate,
-      imagePath: null,
-    })
+    mutate(
+      {
+        name,
+        description,
+        status: 'pending',
+        dueDate,
+        imagePath: null,
+      },
+      {
+        onSuccess(data) {
+          const id = data.data.id
+          router.push(`/projects/${id}`)
 
-    handleClose()
+          handleClose()
+        },
+      },
+    )
   }
 
   return (
