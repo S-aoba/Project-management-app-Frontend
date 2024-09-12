@@ -45,12 +45,19 @@ export const useCreateProject = () => {
     return res.json()
   }
 
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ['creatProject'],
     mutationFn: (props: RequestType) => createProject(props),
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ['userProjects'] })
+    onSuccess(data) {
+      const newData: Project = data.data
+      const cacheData = queryClient.getQueryData<{ data: Project[] }>(['userProjects'])
+
+      if (cacheData?.data === undefined) throw new Error('something went wrong.')
+
+      const updater = { data: [...cacheData.data, newData] }
+
+      queryClient.setQueryData<{ data: Project[] }>(['userProjects'], updater)
     },
   })
-  return { mutate, isPending, isSuccess }
+  return { mutate, isPending }
 }

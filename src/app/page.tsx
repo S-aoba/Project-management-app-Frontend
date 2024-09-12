@@ -21,12 +21,7 @@ export default function Home() {
     if (projectId) {
       router.replace(`/projects/${projectId}`)
     } else if (!open) {
-      /**
-       * 依存配列からopenを削除している理由は、Projectの作成後のモーダルを閉じる挙動によって、
-       * 発火してしまい、再びモーダルが開いてしまう挙動を防ぐ為
-       * ただし、他により良い方法があれば、そちらを採用する
-       */
-      setOpen((open) => !open)
+      setOpen(true)
     }
-  }, [projectId, router, isLoading])
+  }, [projectId, open, setOpen, router, isLoading])
 }
