@@ -12,17 +12,21 @@ export default function Home() {
   const [open, setOpen] = useCreateProjectModal()
 
   const { data, isLoading } = useProjects()
+
   const projectId = useMemo(() => data?.data[0]?.id, [data])
 
   useEffect(() => {
-    console.log(projectId);
-    
     if (isLoading) return
 
     if (projectId) {
       router.replace(`/projects/${projectId}`)
     } else if (!open) {
-      setOpen(true)
+      /**
+       * 依存配列からopenを削除している理由は、Projectの作成後のモーダルを閉じる挙動によって、
+       * 発火してしまい、再びモーダルが開いてしまう挙動を防ぐ為
+       * ただし、他により良い方法があれば、そちらを採用する
+       */
+      setOpen((open) => !open)
     }
-  }, [projectId, open, setOpen, router, isLoading])
+  }, [projectId, router, isLoading])
 }
