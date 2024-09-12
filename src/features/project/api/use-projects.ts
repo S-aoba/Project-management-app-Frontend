@@ -38,5 +38,5 @@ export const useProjects = () => {
     queryFn: fetchProject,
   })
 
-  return { data, isLoading, isFetched, status }
+  return { data, isLoading }
 }
