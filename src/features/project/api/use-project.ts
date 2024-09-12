@@ -39,6 +39,7 @@ export const useProject = (projectId: number) => {
     queryKey: ['project', projectId],
     enabled: !!projectId,
     queryFn: fetchProject,
+    staleTime: Infinity,
   })
 
   return { data, isPending }
