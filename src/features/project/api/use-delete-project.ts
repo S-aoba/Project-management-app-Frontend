@@ -1,7 +1,14 @@
+import { QueryObserverResult, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+
 import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+import { Project } from '@/types/type'
+
+type ResponseType = Project[]
 
 export const useDeleteProject = () => {
+  const router = useRouter()
   const queryClient = useQueryClient()
 
   const { csrfToken, getCsrfToken } = useCsrfToken()
@@ -31,8 +38,30 @@ export const useDeleteProject = () => {
   const { mutate, isPending } = useMutation({
     mutationKey: ['deleteProject'],
     mutationFn: (projectId: number) => deleteProject(projectId),
-    onSuccess() {
+    onSuccess(_, variables) {
       queryClient.invalidateQueries({ queryKey: ['userProjects'] })
+
+      const deleteId = variables
+      const cacheDate = queryClient.getQueryData<QueryObserverResult<ResponseType>>(['userProjects'])
+
+      if (cacheDate === undefined || cacheDate.data === undefined) throw new Error('something went wrong.')
+
+      const updater = cacheDate?.data.filter((data) => data.id !== deleteId)
+      queryClient.setQueryData<{ data: Project[] }>(['userProjects'], { data: updater })
+
+      const query = queryClient.getQueryData<QueryObserverResult<ResponseType>>(['userProjects'])
+
+      if (query === undefined || query.data === undefined) throw new Error('something went wrong.')
+
+      const len = query.data.length
+
+      if (len <= 1) {
+        router.replace('/')
+      } else {
+        const id = query.data[0].id
+
+        router.push(`/projects/${id}`)
+      }
     },
   })
 

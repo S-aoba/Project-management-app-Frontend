@@ -10,8 +10,11 @@ import { useDeleteProject } from '../api/use-delete-project'
 import { useProject } from '../api/use-project'
 
 import { useConfirm } from '@/hooks/use-confirm'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const ProjectHeader = () => {
+  const queryClient = useQueryClient()
+
   const params = useParams()
   const projectId = Number(params.projectId)
 
@@ -26,13 +29,19 @@ export const ProjectHeader = () => {
 
     if (ok) {
       mutate(projectId)
+
+      /**
+       * delete projectのonSuccessで削除対象のprojectのキャッシュを削除してしまうと
+       * 再フェッチが走ってしまってエラーになるので、mutateの後にキャッシュの削除を行うことにした。
+       */
+      queryClient.removeQueries({ queryKey: ['project', projectId] })
     }
   }
 
   return (
     <>
       <ConfirmDialog />
-      {isPending ? ( 
+      {isPending ? (
         <div className='py-8 border-b'>
           <div className='flex items-center justify-start space-x-4 border-b px-2 pb-2'>
             <Skeleton className='w-20 h-4 bg-slate-300' />
