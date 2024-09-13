@@ -5,20 +5,16 @@ import { useErrorMessage } from '@/hooks/use-error-message'
 import { toast } from 'sonner'
 import { useCsrfToken } from './use-csrf-token'
 
-type Props = {
-  setError: React.Dispatch<React.SetStateAction<string>>
-}
-
 type LoginProps = {
   email: string
   password: string
 }
 
-export const useAuth = ({ setError }: Props) => {
-  const { conversionErrorMessage } = useErrorMessage()
-
+export const useAuth = () => {
   const router = useRouter()
   const { csrfToken, getCsrfToken } = useCsrfToken()
+
+  const { conversionErrorMessage } = useErrorMessage()
 
   const { mutate: login, isPending: isLoginPending } = useMutation({
     mutationKey: ['login'],
@@ -46,12 +42,14 @@ export const useAuth = ({ setError }: Props) => {
     onSuccess: () => {
       router.push('/')
     },
-    onError: (error: Error) => {
-      setError(error.message)
-    },
   })
 
-  const { mutate: logout, isPending: isLogoutPending } = useMutation({
+  const {
+    mutate: logout,
+    isPending: isLogoutPending,
+    isError: isLogoutError,
+    error,
+  } = useMutation({
     mutationKey: ['logout'],
     mutationFn: async () => {
       await csrfToken()
@@ -75,13 +73,12 @@ export const useAuth = ({ setError }: Props) => {
     onSuccess: () => {
       window.location.pathname = '/login'
     },
-    onError(error: Error) {
-      setError(error.message)
-
+    onError: (error: Error) => {
       toast.error(conversionErrorMessage(error.message))
+
       router.replace('/login')
     },
   })
 
-  return { login, logout }
+  return { login, isLoginPending, logout, isLogoutError, isLogoutPending, error }
 }
