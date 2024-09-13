@@ -16,6 +16,7 @@ import {
 import { useDeleteTask } from '@/features/task/api/use-delete-task'
 import { useConfirm } from '@/hooks/use-confirm'
 import { Task } from '@/types/type'
+import { useEditTaskSheet } from '@/features/task/store/use-edit-task-sheet'
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -70,6 +71,7 @@ export const columns: ColumnDef<Task>[] = [
     header: 'Action',
     cell: ({ row }) => {
       const [ConfirmDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
+      const [_, setOpen] = useEditTaskSheet()
 
       const { mutate } = useDeleteTask(row.original.projectId)
 
@@ -92,7 +94,7 @@ export const columns: ColumnDef<Task>[] = [
             <DropdownMenuContent>
               <DropdownMenuLabel>Setting</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setOpen(true)}>
                 <EditIcon className='size-4 text-slate-400 mr-2' />
                 Edit
               </DropdownMenuItem>
