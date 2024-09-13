@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 
+import { useDeleteTask } from '@/features/task/api/use-delete-task'
+import { useConfirm } from '@/hooks/use-confirm'
 import { Task } from '@/types/type'
 
 export const columns: ColumnDef<Task>[] = [
@@ -66,27 +68,41 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: 'action',
     header: 'Action',
-    cell: () => {
+    cell: ({ row }) => {
+      const [ConfirmDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
+
+      const { mutate } = useDeleteTask(row.original.projectId)
+
+      const handleDelete = async () => {
+        const ok = await confirm()
+
+        if (ok) {
+          mutate(row.original.id)
+        }
+      }
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <div className='size-8 hover:bg-slate-200 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-300'>
-              <EllipsisVertical className='size-4 text-slate-400' />
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Setting</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <EditIcon className='size-4 text-slate-400 mr-2' />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Trash2 className='size-4 text-slate-400 mr-2' />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <ConfirmDialog />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <div className='size-8 hover:bg-slate-200 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-300'>
+                <EllipsisVertical className='size-4 text-slate-400' />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Setting</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <EditIcon className='size-4 text-slate-400 mr-2' />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>
+                <Trash2 className='size-4 text-slate-400 mr-2' />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       )
     },
   },
