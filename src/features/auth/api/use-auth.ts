@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
+import { useErrorMessage } from '@/hooks/use-error-message'
+import { toast } from 'sonner'
 import { useCsrfToken } from './use-csrf-token'
 
 type Props = {
@@ -13,6 +15,8 @@ type LoginProps = {
 }
 
 export const useAuth = ({ setError }: Props) => {
+  const { conversionErrorMessage } = useErrorMessage()
+
   const router = useRouter()
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
@@ -53,7 +57,7 @@ export const useAuth = ({ setError }: Props) => {
       await csrfToken()
 
       const csrf = getCsrfToken()
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/logout`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/logout`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -62,9 +66,20 @@ export const useAuth = ({ setError }: Props) => {
           'X-XSRF-TOKEN': csrf!,
         },
       })
+
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.message)
+      }
     },
     onSuccess: () => {
       window.location.pathname = '/login'
+    },
+    onError(error: Error) {
+      setError(error.message)
+
+      toast.error(conversionErrorMessage(error.message))
+      router.replace('/login')
     },
   })
 
