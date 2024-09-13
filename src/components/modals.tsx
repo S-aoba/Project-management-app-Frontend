@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { CreateProjectModal } from '@/features/project/components/create-project-modal'
+import { CreateTaskModal } from '@/features/project/components/create-task-modal'
 
 export const Modals = () => {
   const [mounted, setMounted] = useState<boolean>(false)
@@ -16,6 +17,8 @@ export const Modals = () => {
   return (
     <>
       <CreateProjectModal />
+
+      <CreateTaskModal />
     </>
   )
 }
