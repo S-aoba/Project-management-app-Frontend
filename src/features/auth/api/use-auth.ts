@@ -3,12 +3,16 @@ import { useRouter } from 'next/navigation'
 
 import { useCsrfToken } from './use-csrf-token'
 
+type Props = {
+  setError: React.Dispatch<React.SetStateAction<string>>
+}
+
 type LoginProps = {
   email: string
   password: string
 }
 
-export const useAuth = () => {
+export const useAuth = ({ setError }: Props) => {
   const router = useRouter()
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
@@ -31,14 +35,15 @@ export const useAuth = () => {
       })
 
       if (!res.ok) {
-        throw new Error('Authentication failed.')
+        const error = await res.json()
+        throw new Error(error.message)
       }
     },
     onSuccess: () => {
       router.push('/')
     },
     onError: (error: Error) => {
-      // setError(error.message)
+      setError(error.message)
     },
   })
 

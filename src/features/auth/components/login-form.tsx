@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
 
+import { InputError } from '@/components/input-error'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -12,21 +14,22 @@ import { useAuth } from '../api/use-auth'
 export const LoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
-  const { login } = useAuth()
+  const { login } = useAuth({ setError })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     login({
       email,
-      password
+      password,
     })
   }
 
   return (
     <Card className='w-full h-full p-8'>
-      {/* {error && <InputError message={error} />} */}
+      {error && <InputError message={error} />}
       <CardHeader className='px-0 pt-0'>
         <CardTitle>Login</CardTitle>
         <CardDescription>Use your email.</CardDescription>
