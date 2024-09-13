@@ -4,6 +4,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from './ui/checkbox'
 
 import { Task } from '@/types/type'
+import { EllipsisVertical } from 'lucide-react'
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -56,5 +57,12 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: 'action',
     header: 'Action',
+    cell: () => {
+      return (
+        <div className='size-8 hover:bg-slate-200 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-300'>
+          <EllipsisVertical className='size-4 text-slate-400' />
+        </div>
+      )
+    },
   },
 ]
