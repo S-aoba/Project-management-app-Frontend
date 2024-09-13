@@ -1,13 +1,17 @@
 'use client'
 
-import { columns } from '@/components/columns'
-import { DataTable } from '@/components/data-table'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+import { columns } from '@/components/columns'
+import { DataTable } from '@/components/data-table'
+
 import { useProject } from '../api/use-project'
-import { useCreateTaskModal } from '../store/use-create-task-modal'
+
+import { useCreateTaskModal } from '@/features/task/store/use-create-task-modal'
 
 export const Tasks = () => {
   const params = useParams()

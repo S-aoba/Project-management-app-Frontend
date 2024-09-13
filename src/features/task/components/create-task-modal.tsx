@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
-import { useCreateTaskModal } from '../store/use-create-task-modal'
+import { useCreateTaskModal } from '@/features/task/store/use-create-task-modal'
 
 export const CreateTaskModal = () => {
   // const params = useParams()
