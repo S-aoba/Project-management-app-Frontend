@@ -5,16 +5,13 @@ import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 import { Project } from '@/types/type'
 
 type RequestType = Pick<Project, 'name' | 'description' | 'status' | 'dueDate' | 'imagePath'>
-type ResponseType = {
-  data: Project
-}
 
-export const useCreateProject = () => {
+export const useEditProject = (projectId: number) => {
   const queryClient = useQueryClient()
 
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
-  const createProject = async ({ ...props }: RequestType): Promise<ResponseType> => {
+  const editProject = async ({ ...props }: RequestType) => {
     await csrfToken()
 
     const csrf = getCsrfToken()
@@ -27,8 +24,8 @@ export const useCreateProject = () => {
       image_path: props.imagePath,
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/projects`, {
-      method: 'POST',
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/projects/${projectId}`, {
+      method: 'PUT',
       credentials: 'include',
       body: JSON.stringify(projectData),
       headers: {
@@ -42,22 +39,17 @@ export const useCreateProject = () => {
       throw new Error('Unauthenticated.')
     }
 
-    return res.json()
+    return await res.json()
   }
-
   const { mutate, isPending } = useMutation({
-    mutationKey: ['creatProject'],
-    mutationFn: (props: RequestType) => createProject(props),
-    onSuccess(data) {
-      const newData: Project = data.data
-      const cacheData = queryClient.getQueryData<{ data: Project[] }>(['userProjects'])
+    mutationKey: ['editProject', projectId],
+    mutationFn: (props: RequestType) => editProject(props),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['userProjects'] })
 
-      if (cacheData?.data === undefined) throw new Error('something went wrong.')
-
-      const updater = { data: [...cacheData.data, newData] }
-
-      queryClient.setQueryData<{ data: Project[] }>(['userProjects'], updater)
+      queryClient.invalidateQueries({ queryKey: ['project', projectId] })
     },
   })
+
   return { mutate, isPending }
 }

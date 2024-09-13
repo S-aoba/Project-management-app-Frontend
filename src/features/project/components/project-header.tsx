@@ -4,18 +4,45 @@ import { useParams } from 'next/navigation'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-
 import { Skeleton } from '@/components/ui/skeleton'
+
+import { useDeleteProject } from '../api/use-delete-project'
 import { useProject } from '../api/use-project'
 
+import { useConfirm } from '@/hooks/use-confirm'
+import { useQueryClient } from '@tanstack/react-query'
+import { useEditProjectSheet } from '../store/use-edit-project-sheet'
+
 export const ProjectHeader = () => {
+  const queryClient = useQueryClient()
+
   const params = useParams()
   const projectId = Number(params.projectId)
 
   const { data, isPending } = useProject(projectId)
 
+  const { mutate, isPending: isDeletePending } = useDeleteProject()
+
+  const [ConfirmDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
+  const [open, setOpen] = useEditProjectSheet()
+
+  const handleDelete = async () => {
+    const ok = await confirm()
+
+    if (ok) {
+      mutate(projectId)
+
+      /**
+       * delete projectのonSuccessで削除対象のprojectのキャッシュを削除してしまうと
+       * 再フェッチが走ってしまってエラーになるので、mutateの後にキャッシュの削除を行うことにした。
+       */
+      queryClient.removeQueries({ queryKey: ['project', projectId] })
+    }
+  }
+
   return (
     <>
+      <ConfirmDialog />
       {isPending ? (
         <div className='py-8 border-b'>
           <div className='flex items-center justify-start space-x-4 border-b px-2 pb-2'>
@@ -42,10 +69,14 @@ export const ProjectHeader = () => {
             <h1 className='text-2xl text-foreground'>{data?.project.name}</h1>
             <Badge variant={'default'}>{data?.project.status}</Badge>
             <p className='text-sm text-muted-foreground'>{data?.project.dueDate}</p>
-            <Button size={'sm'} variant={'outline'} onClick={() => {}}>
+            <Button
+              disabled={isPending || isDeletePending}
+              size={'sm'}
+              variant={'outline'}
+              onClick={() => setOpen(true)}>
               Edit Project
             </Button>
-            <Button size={'sm'} variant={'destructive'} onClick={() => {}}>
+            <Button disabled={isPending || isDeletePending} size={'sm'} variant={'destructive'} onClick={handleDelete}>
               Delete Project
             </Button>
           </div>

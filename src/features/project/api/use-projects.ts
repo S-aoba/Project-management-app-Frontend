@@ -36,6 +36,7 @@ export const useProjects = () => {
   const { data, isLoading, isFetched, status } = useQuery<ResponseType>({
     queryKey: ['userProjects'],
     queryFn: fetchProject,
+    staleTime: Infinity,
   })
 
   return { data, isLoading }
