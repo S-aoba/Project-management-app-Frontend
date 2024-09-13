@@ -1,10 +1,19 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
+import { EditIcon, EllipsisVertical, Trash2 } from 'lucide-react'
+
 import { Checkbox } from './ui/checkbox'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
 
 import { Task } from '@/types/type'
-import { EllipsisVertical } from 'lucide-react'
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -59,9 +68,25 @@ export const columns: ColumnDef<Task>[] = [
     header: 'Action',
     cell: () => {
       return (
-        <div className='size-8 hover:bg-slate-200 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-300'>
-          <EllipsisVertical className='size-4 text-slate-400' />
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div className='size-8 hover:bg-slate-200 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-300'>
+              <EllipsisVertical className='size-4 text-slate-400' />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Setting</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <EditIcon className='size-4 text-slate-400 mr-2' />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Trash2 className='size-4 text-slate-400 mr-2' />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )
     },
   },
