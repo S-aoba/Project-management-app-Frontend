@@ -1,20 +1,20 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
+import { useErrorMessage } from '@/hooks/use-error-message'
+import { toast } from 'sonner'
 import { useCsrfToken } from './use-csrf-token'
-
-type Props = {
-  setError: React.Dispatch<React.SetStateAction<string>>
-}
 
 type LoginProps = {
   email: string
   password: string
 }
 
-export const useAuth = ({ setError }: Props) => {
+export const useAuth = () => {
   const router = useRouter()
   const { csrfToken, getCsrfToken } = useCsrfToken()
+
+  const { conversionErrorMessage } = useErrorMessage()
 
   const { mutate: login, isPending: isLoginPending } = useMutation({
     mutationKey: ['login'],
@@ -42,18 +42,20 @@ export const useAuth = ({ setError }: Props) => {
     onSuccess: () => {
       router.push('/')
     },
-    onError: (error: Error) => {
-      setError(error.message)
-    },
   })
 
-  const { mutate: logout, isPending: isLogoutPending } = useMutation({
+  const {
+    mutate: logout,
+    isPending: isLogoutPending,
+    isError: isLogoutError,
+    error,
+  } = useMutation({
     mutationKey: ['logout'],
     mutationFn: async () => {
       await csrfToken()
 
       const csrf = getCsrfToken()
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/logout`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/logout`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -62,11 +64,21 @@ export const useAuth = ({ setError }: Props) => {
           'X-XSRF-TOKEN': csrf!,
         },
       })
+
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.message)
+      }
     },
     onSuccess: () => {
       window.location.pathname = '/login'
     },
+    onError: (error: Error) => {
+      toast.error(conversionErrorMessage(error.message))
+
+      router.replace('/login')
+    },
   })
 
-  return { login, logout }
+  return { login, isLoginPending, logout, isLogoutError, isLogoutPending, error }
 }

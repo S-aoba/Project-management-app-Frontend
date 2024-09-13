@@ -16,15 +16,22 @@ export const LoginForm = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const { login } = useAuth({ setError })
+  const { login, isLoginPending } = useAuth()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    login({
-      email,
-      password,
-    })
+    login(
+      {
+        email,
+        password,
+      },
+      {
+        onError(error: Error) {
+          setError(error.message)
+        },
+      },
+    )
   }
 
   return (
@@ -38,7 +45,7 @@ export const LoginForm = () => {
         <form className='space-y-2.5' onSubmit={handleSubmit}>
           <Input
             autoFocus
-            disabled={false}
+            disabled={isLoginPending}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder='Email'
@@ -46,14 +53,14 @@ export const LoginForm = () => {
             required
           />
           <Input
-            disabled={false}
+            disabled={isLoginPending}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder='Password'
             type='password'
             required
           />
-          <Button type='submit' className='w-full' size='lg' disabled={false}>
+          <Button type='submit' className='w-full' size='lg' disabled={isLoginPending}>
             Login
           </Button>
         </form>
