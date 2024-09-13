@@ -100,7 +100,7 @@ export const EditProjectSheet = () => {
             onValueChange={(e) => setStatus(e as 'pending' | 'is_progress' | 'completed')}
             required>
             <SelectTrigger>
-              <SelectValue placeholder='Project Status' defaultValue={'fsdlj'} />
+              <SelectValue placeholder='Project Status' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='pending'>pending</SelectItem>
