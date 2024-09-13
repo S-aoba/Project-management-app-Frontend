@@ -14,7 +14,7 @@ export type Project = {
 export type Task = {
   id: number
   name: string
-  description: string
+  description: string | null
   dueDate: string
   status: 'pending' | 'is_progress' | 'completed'
   priority: 'low' | 'medium' | 'high'
@@ -24,6 +24,7 @@ export type Task = {
   createdAt: string
   updatedAt: string
   assignedUserId: number
+  projectId: number
 }
 
 export type User = {

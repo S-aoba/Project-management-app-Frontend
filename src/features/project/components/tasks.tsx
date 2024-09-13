@@ -1,18 +1,25 @@
 'use client'
 
-import { columns } from '@/components/columns'
-import { DataTable } from '@/components/data-table'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+import { columns } from '@/components/columns'
+import { DataTable } from '@/components/data-table'
+
 import { useProject } from '../api/use-project'
+
+import { useCreateTaskModal } from '@/features/task/store/use-create-task-modal'
 
 export const Tasks = () => {
   const params = useParams()
   const projectId = Number(params.projectId)
 
   const { data, isPending } = useProject(projectId)
+
+  const [_, setOpen] = useCreateTaskModal()
 
   return (
     <div className='h-full flex flex-col'>
@@ -22,7 +29,12 @@ export const Tasks = () => {
       <div className='h-full p-4 flex flex-col space-y-4'>
         <Input className='w-60' placeholder='Search Task...' />
         <div>
-          <Button onClick={() => {}}>Create Task</Button>
+          <Button
+            onClick={() => {
+              setOpen(true)
+            }}>
+            Create Task
+          </Button>
         </div>
         {isPending ? (
           <div className='h-full flex items-center justify-center'>
