@@ -2,7 +2,7 @@
 
 import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
-// import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -14,11 +14,13 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
-import { useCreateTaskModal } from '@/features/task/store/use-create-task-modal'
+import { useCreateTask } from '../api/use-create-task'
+import { useCreateTaskModal } from '../store/use-create-task-modal'
 
 export const CreateTaskModal = () => {
-  // const params = useParams()
-  // const projectId = Number(params.projectId)
+  const params = useParams()
+  const projectId = Number(params.projectId)
+  const { mutate } = useCreateTask()
 
   const [open, setOpen] = useCreateTaskModal()
 
@@ -38,6 +40,20 @@ export const CreateTaskModal = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (date === undefined) return
+    const dueDate = format(date, 'yyyy-MM-dd')
+
+    mutate({
+      name,
+      description,
+      status,
+      priority,
+      imagePath: null,
+      dueDate,
+      assignedUserId: 1,
+      projectId,
+    })
 
     handleClose()
   }
