@@ -12,7 +12,7 @@ export const useCreateTask = () => {
 
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
-  const createProject = async ({ ...props }: RequestType) => {
+  const creataTask = async ({ ...props }: RequestType) => {
     await csrfToken()
 
     const csrf = getCsrfToken()
@@ -48,7 +48,7 @@ export const useCreateTask = () => {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['createTask'],
-    mutationFn: (props: RequestType) => createProject(props),
+    mutationFn: (props: RequestType) => creataTask(props),
     onSuccess(_, variables) {
       queryClient.invalidateQueries({ queryKey: ['project', variables.projectId] })
     },
