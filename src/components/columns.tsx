@@ -14,9 +14,9 @@ import {
 } from './ui/dropdown-menu'
 
 import { useDeleteTask } from '@/features/task/api/use-delete-task'
+import { useEditTaskSheet } from '@/features/task/store/use-edit-task-sheet'
 import { useConfirm } from '@/hooks/use-confirm'
 import { Task } from '@/types/type'
-import { useEditTaskSheet } from '@/features/task/store/use-edit-task-sheet'
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -94,7 +94,13 @@ export const columns: ColumnDef<Task>[] = [
             <DropdownMenuContent>
               <DropdownMenuLabel>Setting</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setOpen(true)}>
+              <DropdownMenuItem
+                onClick={() =>
+                  setOpen({
+                    isOpen: true,
+                    id: row.original.id,
+                  })
+                }>
                 <EditIcon className='size-4 text-slate-400 mr-2' />
                 Edit
               </DropdownMenuItem>

@@ -16,40 +16,49 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 
 import { useProject } from '@/features/project/api/use-project'
+
+import { useEditTask } from '../api/use-edit-task'
 import { useEditTaskSheet } from '../store/use-edit-task-sheet'
 
 export const EditTaskSheet = () => {
   const params = useParams()
   const projectId = Number(params.projectId)
   const { data } = useProject(projectId)
-
   const [open, setOpen] = useEditTaskSheet()
+  const { mutate, isPending } = useEditTask(open.id)
 
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string | null | undefined>(null)
   const [status, setStatus] = useState<'pending' | 'is_progress' | 'completed'>('pending')
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low')
   const [date, setDate] = useState<Date | undefined>(undefined)
+  const [assignedUserId, setAssignedUserId] = useState<number>(0)
+  const [projectIdState, setProjectId] = useState<number>(0)
 
   useEffect(() => {
-    if (data) {
+    if (data && open.id) {
       data.tasks.map((item) => {
-        if (item.projectId === projectId) {
+        if (item.id === open.id) {
           setName(item.name)
           setDescription(item.description)
           setStatus(item.status)
           setDate(new Date(item.dueDate))
+          setAssignedUserId(item.assignedUserId)
+          setProjectId(item.projectId)
         }
       })
     }
-  }, [data])
+  }, [data, open.id])
 
   const handleClose = () => {
     setName('')
     setDescription('')
     setStatus('pending')
     setDate(undefined)
+    setAssignedUserId(0)
+    setProjectId(0)
 
-    setOpen(false)
+    setOpen({ isOpen: false, id: undefined })
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,11 +67,22 @@ export const EditTaskSheet = () => {
     if (date === undefined) return
     const dueDate = format(date, 'yyyy-MM-dd')
 
+    mutate({
+      name,
+      description: description || '',
+      status,
+      priority,
+      imagePath: null,
+      dueDate,
+      assignedUserId,
+      projectId: projectIdState,
+    })
+
     handleClose()
   }
 
   return (
-    <Sheet open={open} onOpenChange={handleClose}>
+    <Sheet open={open.isOpen} onOpenChange={handleClose}>
       <SheetContent side={'bottom'}>
         <SheetHeader>
           <SheetTitle>Edit Project</SheetTitle>
@@ -70,20 +90,20 @@ export const EditTaskSheet = () => {
         </SheetHeader>
         <form className='space-y-4' onSubmit={handleSubmit}>
           <Input
-            defaultValue={data?.project.name}
+            defaultValue={name}
             name={name}
             onChange={(e) => setName(e.target.value)}
-            disabled={false}
+            disabled={isPending}
             required
             autoFocus
             minLength={3}
             placeholder='Project name'
           />
           <Input
-            defaultValue={data?.project.description || ''}
+            defaultValue={description || ''}
             name={description || ''}
             onChange={(e) => setDescription(e.target.value)}
-            disabled={false}
+            disabled={isPending}
             required
             minLength={3}
             placeholder='Project Description'
@@ -102,10 +122,24 @@ export const EditTaskSheet = () => {
               <SelectItem value='completed'>completed</SelectItem>
             </SelectContent>
           </Select>
+          <Select
+            defaultValue={priority}
+            name={priority}
+            onValueChange={(e) => setPriority(e as 'low' | 'medium' | 'high')}
+            required>
+            <SelectTrigger>
+              <SelectValue placeholder='Project Priority' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='low'>low</SelectItem>
+              <SelectItem value='medium'>medium</SelectItem>
+              <SelectItem value='high'>high</SelectItem>
+            </SelectContent>
+          </Select>
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                disabled={false}
+                disabled={isPending}
                 variant={'outline'}
                 className={cn('w-[280px] justify-start text-left font-normal', !date && 'text-muted-foreground')}>
                 <CalendarIcon className='mr-2 h-4 w-4' />
@@ -117,10 +151,10 @@ export const EditTaskSheet = () => {
             </PopoverContent>
           </Popover>
           <div className='flex justify-end space-x-4'>
-            <Button variant={'outline'} type='button' disabled={false} onClick={() => handleClose()}>
+            <Button variant={'outline'} type='button' disabled={isPending} onClick={() => handleClose()}>
               Cancel
             </Button>
-            <Button disabled={false}>Edit</Button>
+            <Button disabled={isPending}>Edit</Button>
           </div>
         </form>
       </SheetContent>
