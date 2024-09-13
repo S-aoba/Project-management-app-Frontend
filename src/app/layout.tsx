@@ -1,5 +1,6 @@
 import { QueryProvider } from '@/providers/query-provider'
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner'
 
 import localFont from 'next/font/local'
 
@@ -37,6 +38,7 @@ export default function RootLayout({
         <QueryProvider>
           <Modals />
           <Sheets />
+          <Toaster />
           {children}
         </QueryProvider>
       </body>
