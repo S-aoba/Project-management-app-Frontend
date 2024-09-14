@@ -98,7 +98,7 @@ export const CreateProjectModal = () => {
             </Popover>
             <div className='flex justify-end'>
               <Button type='submit' disabled={isPending}>
-                {isPending ? 'Waiting....' : 'Create'}
+                Create
               </Button>
             </div>
           </form>
