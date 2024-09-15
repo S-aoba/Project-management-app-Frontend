@@ -31,3 +31,11 @@ export type User = {
   id: number
   name: string
 }
+
+export type ValidationErrorType = {
+  name: string[]
+  description: string[]
+  due_date: string[]
+  status: string[]
+  priority: string[]
+}
