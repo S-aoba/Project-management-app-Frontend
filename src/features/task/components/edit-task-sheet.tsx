@@ -51,14 +51,16 @@ export const EditTaskSheet = () => {
   }, [data, open.id])
 
   const handleClose = () => {
-    setName('')
-    setDescription('')
-    setStatus('pending')
-    setDate(undefined)
-    setAssignedUserId(0)
-    setProjectId(0)
-
     setOpen({ isOpen: false, id: undefined })
+
+    setTimeout(() => {
+      setName('')
+      setDescription('')
+      setStatus('pending')
+      setDate(undefined)
+      setAssignedUserId(0)
+      setProjectId(0)
+    }, 500)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -90,7 +92,7 @@ export const EditTaskSheet = () => {
         </SheetHeader>
         <form className='space-y-4' onSubmit={handleSubmit}>
           <Input
-            defaultValue={name}
+            value={name}
             name={name}
             onChange={(e) => setName(e.target.value)}
             disabled={isPending}
@@ -100,7 +102,7 @@ export const EditTaskSheet = () => {
             placeholder='Project name'
           />
           <Input
-            defaultValue={description || ''}
+            value={description || ''}
             name={description || ''}
             onChange={(e) => setDescription(e.target.value)}
             disabled={isPending}
@@ -109,7 +111,7 @@ export const EditTaskSheet = () => {
             placeholder='Project Description'
           />
           <Select
-            defaultValue={status}
+            value={status}
             name={status}
             onValueChange={(e) => setStatus(e as 'pending' | 'is_progress' | 'completed')}
             required>
@@ -123,7 +125,7 @@ export const EditTaskSheet = () => {
             </SelectContent>
           </Select>
           <Select
-            defaultValue={priority}
+            value={priority}
             name={priority}
             onValueChange={(e) => setPriority(e as 'low' | 'medium' | 'high')}
             required>
