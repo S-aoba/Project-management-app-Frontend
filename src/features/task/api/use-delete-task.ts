@@ -1,11 +1,7 @@
-import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
-import { Task } from '@/types/type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-type RequestType = Pick<
-  Task,
-  'name' | 'description' | 'status' | 'priority' | 'imagePath' | 'dueDate' | 'assignedUserId' | 'projectId'
->
+import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 
 export const useDeleteTask = (projectId: number) => {
   const queryClient = useQueryClient()
@@ -28,7 +24,7 @@ export const useDeleteTask = (projectId: number) => {
     })
 
     if (!res.ok) {
-      throw new Error('Unauthenticated.')
+      throw new Error('Delete task failed.')
     }
 
     return res.json()
@@ -38,9 +34,10 @@ export const useDeleteTask = (projectId: number) => {
     mutationKey: ['deleteTask'],
     mutationFn: deleteTask,
     onSuccess() {
-      console.log(projectId)
-
       queryClient.invalidateQueries({ queryKey: ['project', projectId] })
+    },
+    onError(error: Error) {
+      toast.error(error.message)
     },
   })
 

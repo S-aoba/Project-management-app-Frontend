@@ -29,7 +29,7 @@ export const useDeleteProject = () => {
     })
 
     if (!res.ok) {
-      throw new Error('Unauthenticated.')
+      throw new Error('Delete project failed.')
     }
 
     return await res.json()
