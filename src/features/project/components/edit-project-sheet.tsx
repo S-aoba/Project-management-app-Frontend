@@ -46,6 +46,7 @@ export const EditProjectSheet = () => {
       setDescription(data.project.description)
       setStatus(data.project.status)
       setDate(new Date(data.project.dueDate))
+      setErrors(null)
     }
   }, [data, open])
 
