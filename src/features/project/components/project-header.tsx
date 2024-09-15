@@ -31,14 +31,21 @@ export const ProjectHeader = () => {
     const ok = await confirm()
 
     if (ok) {
-      mutate(projectId)
+      mutate(projectId, {
+        onSuccess() {
+          /**
+           * delete projectのonSuccessで削除対象のprojectのキャッシュを削除してしまうと
+           * 再フェッチが走ってしまってエラーになるので、mutateの後にキャッシュの削除を行うことにした。
+           */
+          queryClient.removeQueries({ queryKey: ['project', projectId] })
+          toast.success('Project deleted successfully.')
+          
+        },
+        onError(error) {
+          toast.error(error.message)
+        }
+      })
 
-      /**
-       * delete projectのonSuccessで削除対象のprojectのキャッシュを削除してしまうと
-       * 再フェッチが走ってしまってエラーになるので、mutateの後にキャッシュの削除を行うことにした。
-       */
-      queryClient.removeQueries({ queryKey: ['project', projectId] })
-      toast.success('Project deleted successfully.')
     }
   }
 

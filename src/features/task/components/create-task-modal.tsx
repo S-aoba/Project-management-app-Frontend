@@ -15,8 +15,12 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
+import { ActionError } from '@/components/action-error'
+
 import { useCreateTask } from '../api/use-create-task'
 import { useCreateTaskModal } from '../store/use-create-task-modal'
+
+import { ValidationErrorType } from '@/types/type'
 
 export const CreateTaskModal = () => {
   const params = useParams()
@@ -31,12 +35,17 @@ export const CreateTaskModal = () => {
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low')
   const [date, setDate] = useState<Date | undefined>(new Date())
 
-  const handleClose = () => {
-    setName('')
-    setDescription('')
-    setStatus('pending')
+  const [errors, setErrors] = useState<ValidationErrorType | null>(null)
 
+  const handleClose = () => {
     setOpen(false)
+
+    setTimeout(() => {
+      setName('')
+      setDescription('')
+      setStatus('pending')
+      setErrors(null)
+    }, 500)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -45,20 +54,31 @@ export const CreateTaskModal = () => {
     if (date === undefined) return
     const dueDate = format(date, 'yyyy-MM-dd')
 
-    mutate({
-      name,
-      description,
-      status,
-      priority,
-      imagePath: null,
-      dueDate,
-      assignedUserId: 1,
-      projectId,
-    })
+    mutate(
+      {
+        name,
+        description,
+        status,
+        priority,
+        imagePath: null,
+        dueDate,
+        assignedUserId: 1,
+        projectId,
+      },
+      {
+        onSuccess() {
+          handleClose()
 
-    handleClose()
+          toast.success('Task created successfully.')
+        },
+        onError(error) {
+          console.log(error)
 
-    toast.success('Task created successfully.')
+          const errorMessages: ValidationErrorType = JSON.parse(error.message).errors
+          setErrors(errorMessages)
+        },
+      },
+    )
   }
 
   return (
@@ -66,6 +86,7 @@ export const CreateTaskModal = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create Task</DialogTitle>
+          {errors && <ActionError {...errors} />}
           <DialogDescription />
           <form className='space-y-4' onSubmit={handleSubmit}>
             <Input

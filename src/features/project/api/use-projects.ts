@@ -33,7 +33,7 @@ export const useProjects = () => {
     return res.json()
   }
 
-  const { data, isLoading, isFetched, status } = useQuery<ResponseType>({
+  const { data, isLoading } = useQuery<ResponseType>({
     queryKey: ['userProjects'],
     queryFn: fetchProject,
     staleTime: Infinity,

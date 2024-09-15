@@ -18,8 +18,12 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 
 import { useProject } from '@/features/project/api/use-project'
 
+import { ActionError } from '@/components/action-error'
+
 import { useEditTask } from '../api/use-edit-task'
 import { useEditTaskSheet } from '../store/use-edit-task-sheet'
+
+import { ValidationErrorType } from '@/types/type'
 
 export const EditTaskSheet = () => {
   const params = useParams()
@@ -35,6 +39,8 @@ export const EditTaskSheet = () => {
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [assignedUserId, setAssignedUserId] = useState<number>(0)
   const [projectIdState, setProjectId] = useState<number>(0)
+
+  const [errors, setErrors] = useState<ValidationErrorType | null>(null)
 
   useEffect(() => {
     if (data && open.id) {
@@ -61,6 +67,7 @@ export const EditTaskSheet = () => {
       setDate(undefined)
       setAssignedUserId(0)
       setProjectId(0)
+      setErrors(null)
     }, 500)
   }
 
@@ -70,20 +77,29 @@ export const EditTaskSheet = () => {
     if (date === undefined) return
     const dueDate = format(date, 'yyyy-MM-dd')
 
-    mutate({
-      name,
-      description: description || '',
-      status,
-      priority,
-      imagePath: null,
-      dueDate,
-      assignedUserId,
-      projectId: projectIdState,
-    })
+    mutate(
+      {
+        name,
+        description: description || '',
+        status,
+        priority,
+        imagePath: null,
+        dueDate,
+        assignedUserId,
+        projectId: projectIdState,
+      },
+      {
+        onSuccess() {
+          handleClose()
 
-    handleClose()
-
-    toast.success('Task edited successfully.')
+          toast.success('Task edited successfully.')
+        },
+        onError(error) {
+          const errorMessages: ValidationErrorType = JSON.parse(error.message).errors
+          setErrors(errorMessages)
+        },
+      },
+    )
   }
 
   return (
@@ -91,6 +107,7 @@ export const EditTaskSheet = () => {
       <SheetContent side={'bottom'}>
         <SheetHeader>
           <SheetTitle>Edit Project</SheetTitle>
+          {errors && <ActionError {...errors} />}
           <SheetDescription />
         </SheetHeader>
         <form className='space-y-4' onSubmit={handleSubmit}>

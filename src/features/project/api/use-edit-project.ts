@@ -36,7 +36,8 @@ export const useEditProject = (projectId: number) => {
     })
 
     if (!res.ok) {
-      throw new Error('Unauthenticated.')
+      const error = await res.json()
+      throw new Error(JSON.stringify(error))
     }
 
     return await res.json()
