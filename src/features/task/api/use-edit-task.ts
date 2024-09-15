@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 
 import { Task } from '@/types/type'
+import { toast } from 'sonner'
 
 type RequestType = Pick<
   Task,
@@ -54,6 +55,8 @@ export const useEditTask = (taskId: number | undefined) => {
       queryClient.invalidateQueries({ queryKey: ['userProjects'] })
 
       queryClient.invalidateQueries({ queryKey: ['project', variables.projectId] })
+
+      toast.success('Task edited successfully.')
     },
   })
 
