@@ -41,6 +41,8 @@ export const useAuth = () => {
     },
     onSuccess: () => {
       router.push('/')
+
+      toast.success('Login successfully.')
     },
   })
 

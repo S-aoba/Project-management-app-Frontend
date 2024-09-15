@@ -1,6 +1,7 @@
 import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 import { Task } from '@/types/type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 type RequestType = Pick<
   Task,
@@ -51,6 +52,8 @@ export const useCreateTask = () => {
     mutationFn: (props: RequestType) => creataTask(props),
     onSuccess(_, variables) {
       queryClient.invalidateQueries({ queryKey: ['project', variables.projectId] })
+
+      toast.success('Task created successfully.')
     },
   })
 
