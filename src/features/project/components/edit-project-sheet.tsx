@@ -33,21 +33,23 @@ export const EditProjectSheet = () => {
   const [date, setDate] = useState<Date | undefined>(undefined)
 
   useEffect(() => {
-    if (data) {
+    if (data && open) {
       setName(data.project.name)
       setDescription(data.project.description)
       setStatus(data.project.status)
       setDate(new Date(data.project.dueDate))
     }
-  }, [data])
+  }, [data, open])
 
   const handleClose = () => {
-    setName('')
-    setDescription('')
-    setStatus('pending')
-    setDate(undefined)
-
     setOpen(false)
+
+    setTimeout(() => {
+      setName('')
+      setDescription('')
+      setStatus('pending')
+      setDate(undefined)
+    }, 500)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,7 +78,7 @@ export const EditProjectSheet = () => {
         </SheetHeader>
         <form className='space-y-4' onSubmit={handleSubmit}>
           <Input
-            defaultValue={data?.project.name}
+            value={name}
             name={name}
             onChange={(e) => setName(e.target.value)}
             disabled={isPending}
@@ -86,7 +88,7 @@ export const EditProjectSheet = () => {
             placeholder='Project name'
           />
           <Input
-            defaultValue={data?.project.description || ''}
+            value={description || ''}
             name={description || ''}
             onChange={(e) => setDescription(e.target.value)}
             disabled={isPending}
@@ -95,7 +97,7 @@ export const EditProjectSheet = () => {
             placeholder='Project Description'
           />
           <Select
-            defaultValue={status}
+            value={status}
             name={status}
             onValueChange={(e) => setStatus(e as 'pending' | 'is_progress' | 'completed')}
             required>
