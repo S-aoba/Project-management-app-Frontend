@@ -1,7 +1,6 @@
 import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 import { Task } from '@/types/type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 type RequestType = Pick<
   Task,
@@ -42,8 +41,6 @@ export const useDeleteTask = (projectId: number) => {
       console.log(projectId)
 
       queryClient.invalidateQueries({ queryKey: ['project', projectId] })
-
-      toast.success('Task deleted successfully.')
     },
   })
 

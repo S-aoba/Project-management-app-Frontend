@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 
 import { Project } from '@/types/type'
-import { toast } from 'sonner'
 
 type ResponseType = Project[]
 
@@ -63,8 +62,6 @@ export const useDeleteProject = () => {
 
         router.push(`/projects/${id}`)
       }
-
-      toast.success('Project deleted successfully.')
     },
   })
 

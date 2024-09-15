@@ -2,6 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { EditIcon, EllipsisVertical, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Checkbox } from './ui/checkbox'
 import {
@@ -80,6 +81,7 @@ export const columns: ColumnDef<Task>[] = [
 
         if (ok) {
           mutate(row.original.id)
+          toast.success('Task deleted successfully.')
         }
       }
       return (

@@ -1,6 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
+import { toast } from 'sonner'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -37,6 +38,7 @@ export const ProjectHeader = () => {
        * 再フェッチが走ってしまってエラーになるので、mutateの後にキャッシュの削除を行うことにした。
        */
       queryClient.removeQueries({ queryKey: ['project', projectId] })
+      toast.success('Project deleted successfully.')
     }
   }
 

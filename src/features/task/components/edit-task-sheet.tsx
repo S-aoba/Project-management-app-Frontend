@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
@@ -81,6 +82,8 @@ export const EditTaskSheet = () => {
     })
 
     handleClose()
+
+    toast.success('Task edited successfully.')
   }
 
   return (

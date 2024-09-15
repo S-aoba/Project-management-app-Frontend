@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib/utils'
 
@@ -55,6 +56,8 @@ export const CreateProjectModal = () => {
           router.push(`/projects/${id}`)
 
           handleClose()
+
+          toast.success('Project created successfully.')
         },
       },
     )

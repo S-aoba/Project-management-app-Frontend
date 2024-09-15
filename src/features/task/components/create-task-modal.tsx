@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib/utils'
 
@@ -56,6 +57,8 @@ export const CreateTaskModal = () => {
     })
 
     handleClose()
+
+    toast.success('Task created successfully.')
   }
 
   return (
