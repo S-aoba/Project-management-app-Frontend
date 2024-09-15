@@ -40,7 +40,8 @@ export const useCreateTask = () => {
     })
 
     if (!res.ok) {
-      throw new Error('Unauthenticated.')
+      const error = await res.json()
+      throw new Error(JSON.stringify(error))
     }
 
     return res.json()
