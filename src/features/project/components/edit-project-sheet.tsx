@@ -16,9 +16,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 
+import { ActionError } from '@/components/action-error'
+
 import { useEditProject } from '../api/use-edit-project'
 import { useProject } from '../api/use-project'
+
 import { useEditProjectSheet } from '../store/use-edit-project-sheet'
+
+import { ValidationErrorType } from '@/types/type'
 
 export const EditProjectSheet = () => {
   const params = useParams()
@@ -32,6 +37,8 @@ export const EditProjectSheet = () => {
   const [description, setDescription] = useState<string | null | undefined>(null)
   const [status, setStatus] = useState<'pending' | 'is_progress' | 'completed'>('pending')
   const [date, setDate] = useState<Date | undefined>(undefined)
+
+  const [errors, setErrors] = useState<ValidationErrorType | null>(null)
 
   useEffect(() => {
     if (data && open) {
@@ -59,17 +66,27 @@ export const EditProjectSheet = () => {
     if (date === undefined) return
     const dueDate = format(date, 'yyyy-MM-dd')
 
-    mutate({
-      name,
-      description: description || '',
-      status,
-      dueDate,
-      imagePath: null,
-    })
+    mutate(
+      {
+        name,
+        description: description || '',
+        status,
+        dueDate,
+        imagePath: null,
+      },
 
-    handleClose()
+      {
+        onSuccess() {
+          handleClose()
 
-    toast.success('Project edited successfully.')
+          toast.success('Project edited successfully.')
+        },
+        onError(error) {
+          const errorMessages: ValidationErrorType = JSON.parse(error.message).errors
+          setErrors(errorMessages)
+        },
+      },
+    )
   }
 
   return (
@@ -77,6 +94,7 @@ export const EditProjectSheet = () => {
       <SheetContent side={'bottom'}>
         <SheetHeader>
           <SheetTitle>Edit Project</SheetTitle>
+          {errors && <ActionError {...errors} />}
           <SheetDescription />
         </SheetHeader>
         <form className='space-y-4' onSubmit={handleSubmit}>
