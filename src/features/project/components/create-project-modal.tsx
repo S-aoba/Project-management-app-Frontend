@@ -14,8 +14,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
+import { ActionError } from '@/components/action-error'
+
 import { useCreateProject } from '../api/use-create-project'
 import { useCreateProjectModal } from '../store/use-create-project-modal'
+
+import { ValidationErrorType } from '@/types/type'
 
 export const CreateProjectModal = () => {
   const router = useRouter()
@@ -28,12 +32,17 @@ export const CreateProjectModal = () => {
   const [description, setDescription] = useState('')
   const [date, setDate] = useState<Date | undefined>(new Date())
 
-  const handleClose = () => {
-    setName('')
-    setDescription('')
-    setDate(undefined)
+  const [errors, setErrors] = useState<ValidationErrorType | null>(null)
 
+  const handleClose = () => {
     setOpen(false)
+
+    setTimeout(() => {
+      setName('')
+      setDescription('')
+      setDate(new Date())
+      setErrors(null)
+    }, 500)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,6 +68,10 @@ export const CreateProjectModal = () => {
 
           toast.success('Project created successfully.')
         },
+        onError(error) {
+          const errorMessages: ValidationErrorType = JSON.parse(error.message).errors
+          setErrors(errorMessages)
+        },
       },
     )
   }
@@ -68,6 +81,7 @@ export const CreateProjectModal = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create Project</DialogTitle>
+          {errors && <ActionError {...errors} />}
           <DialogDescription />
           <form className='space-y-4' onSubmit={handleSubmit}>
             <Input
