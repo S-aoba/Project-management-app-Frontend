@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
+import { Label } from '@/components/ui/label'
 import { useAuth } from '../api/use-auth'
 
 export const LoginForm = () => {
@@ -39,28 +40,41 @@ export const LoginForm = () => {
       <Card className='w-full h-full p-8'>
         {error && <InputError message={error} />}
         <CardHeader className='px-0 pt-0'>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Use your email.</CardDescription>
+          <CardTitle className='text-xl'>Login</CardTitle>
+          <CardDescription />
         </CardHeader>
-        <CardContent className='space-y-5 px-0 pb-0'>
-          <form className='space-y-2.5' onSubmit={handleSubmit}>
+        <CardContent className='px-0 pb-0'>
+          <form className='flex flex-col space-y-4' onSubmit={handleSubmit}>
+            <Label htmlFor='email'>Email</Label>
             <Input
-              autoFocus
-              disabled={isLoginPending}
+              id='email'
+              name='email'
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder='Email'
-              type='email'
-              required
-            />
-            <Input
               disabled={isLoginPending}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder='Password'
-              type='password'
+              onChange={(e) => setEmail(e.target.value)}
+              autoFocus
+              type='email'
+              placeholder='Email'
               required
             />
+            <div className='flex flex-col'>
+              <div className='flex justify-between items-center mb-2'>
+                <Label htmlFor='password'>Password</Label>
+                <Link href={'#'} className='text-[13px] text-blue-500 hover:underline hover:underline-offset-2'>
+                  Forgot password?
+                </Link>
+              </div>
+              <Input
+                id='password'
+                name='password'
+                value={password}
+                disabled={isLoginPending}
+                onChange={(e) => setPassword(e.target.value)}
+                type='password'
+                placeholder='Password'
+                required
+              />
+            </div>
             <Button type='submit' className='w-full' size='lg' disabled={isLoginPending}>
               Login
             </Button>
