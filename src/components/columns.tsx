@@ -21,6 +21,7 @@ import { useEditTaskSheet } from '@/features/task/store/use-edit-task-sheet'
 
 import { useConfirm } from '@/hooks/use-confirm'
 
+import { Priority } from '@/features/task/components/priority'
 import { Task } from '@/types/type'
 
 export const columns: ColumnDef<Task>[] = [
@@ -55,6 +56,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: 'priority',
     header: 'Priority',
+    cell: ({ row }) => <Priority priority={row.original.priority}/>,
   },
   {
     accessorKey: 'dueDate',
