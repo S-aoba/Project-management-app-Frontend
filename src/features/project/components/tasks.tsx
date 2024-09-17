@@ -42,7 +42,7 @@ export const Tasks = () => {
 
         </div>
       </div>
-      <div className='h-full w-full flex justify-center'>
+      <div className='h-full w-full flex justify-start items-start'>
         {isPending ? (
           <Loader2 className='size-8 text-slate-300 animate-spin' />
         ) : (

@@ -5,7 +5,6 @@ import { Edit, EllipsisVertical, Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -15,6 +14,7 @@ import { useConfirm } from '@/hooks/use-confirm'
 import { useDeleteProject } from '../api/use-delete-project'
 import { useProject } from '../api/use-project'
 
+import { Status } from '@/components/status'
 import { useEditProjectSheet } from '../store/use-edit-project-sheet'
 
 export const ProjectHeader = () => {
@@ -104,7 +104,7 @@ export const ProjectHeader = () => {
           <div className='flex space-x-4 items-center'>
             <div className='felx items-center'>
               <span className='text-sm'>Status: </span>
-              <Badge variant={'default'}>{data?.project.status}</Badge>
+              <Status status={data!.project.status} />
             </div>
             <p className='text-sm'>Created on: {data?.project.dueDate}</p>
           </div>

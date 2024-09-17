@@ -14,9 +14,13 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 
+import { Status } from '@/components/status'
+
 import { useDeleteTask } from '@/features/task/api/use-delete-task'
 import { useEditTaskSheet } from '@/features/task/store/use-edit-task-sheet'
+
 import { useConfirm } from '@/hooks/use-confirm'
+
 import { Task } from '@/types/type'
 
 export const columns: ColumnDef<Task>[] = [
@@ -42,6 +46,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: 'status',
     header: 'Status',
+    cell: ({ row }) => <Status status={row.original.status} />,
   },
   {
     accessorKey: 'name',
