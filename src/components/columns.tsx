@@ -53,20 +53,16 @@ export const columns: ColumnDef<Task>[] = [
     header: 'Name',
   },
   {
-    accessorKey: 'dueDate',
-    header: 'DueDate',
-  },
-  {
     accessorKey: 'priority',
     header: 'Priority',
   },
   {
-    accessorKey: 'assignedUserId',
-    header: 'AssignedUser',
+    accessorKey: 'dueDate',
+    header: 'DueDate',
   },
   {
-    accessorKey: 'createdBy',
-    header: 'CreatedBy',
+    accessorKey: 'assignedUserId',
+    header: 'AssignedUser',
   },
   {
     accessorKey: 'createdAt',
