@@ -18,7 +18,7 @@ export const NavigationItem = ({ name, id }: { name: string; id: number }) => {
         )}>
         <div className='w-4/5 flex items-center justify-start'>
           <Folder className='size-6 mr-2 group-hover:text-black transition-colors duration-300' />
-          <p className='w-40 group-hover:text-black text-sm transition-colors duration-300 truncate'>{name}</p>
+          <p className='w-40 text-start group-hover:text-black text-sm transition-colors duration-300 truncate'>{name}</p>
         </div>
       </div>
     </Link>
