@@ -1,17 +1,20 @@
 'use client'
 
+import { useQueryClient } from '@tanstack/react-query'
+import { Edit, EllipsisVertical, Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
+
+import { useConfirm } from '@/hooks/use-confirm'
 
 import { useDeleteProject } from '../api/use-delete-project'
 import { useProject } from '../api/use-project'
 
-import { useConfirm } from '@/hooks/use-confirm'
-import { useQueryClient } from '@tanstack/react-query'
 import { useEditProjectSheet } from '../store/use-edit-project-sheet'
 
 export const ProjectHeader = () => {
@@ -25,7 +28,7 @@ export const ProjectHeader = () => {
   const { mutate, isPending: isDeletePending } = useDeleteProject()
 
   const [ConfirmDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
-  const [open, setOpen] = useEditProjectSheet()
+  const [_open, setOpen] = useEditProjectSheet()
 
   const handleDelete = async () => {
     const ok = await confirm()
@@ -39,13 +42,11 @@ export const ProjectHeader = () => {
            */
           queryClient.removeQueries({ queryKey: ['project', projectId] })
           toast.success('Project deleted successfully.')
-          
         },
         onError(error) {
           toast.error(error.message)
-        }
+        },
       })
-
     }
   }
 
@@ -73,25 +74,42 @@ export const ProjectHeader = () => {
           </div>
         </div>
       ) : (
-        <div className='py-8 border-b'>
-          <div className='flex items-center justify-start space-x-4 border-b px-2 pb-2'>
+        <div className='space-y-4'>
+          <div className='flex items-center justify-between'>
             <h1 className='text-2xl text-foreground'>{data?.project.name}</h1>
-            <Badge variant={'default'}>{data?.project.status}</Badge>
-            <p className='text-sm text-muted-foreground'>{data?.project.dueDate}</p>
-            <Button
-              disabled={isPending || isDeletePending}
-              size={'sm'}
-              variant={'outline'}
-              onClick={() => setOpen(true)}>
-              Edit Project
-            </Button>
-            <Button disabled={isPending || isDeletePending} size={'sm'} variant={'destructive'} onClick={handleDelete}>
-              Delete Project
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger className='hover:bg-gray-100 p-2 rounded-full transition-colors duration-300'>
+                <EllipsisVertical className='size-4' />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Edit className='size-4' />
+                  <Button
+                    disabled={isPending || isDeletePending}
+                    size={'sm'}
+                    variant={'ghost'}
+                    onClick={() => setOpen(true)}>
+                    Edit
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Trash2 className='size-4' />
+                  <Button disabled={isPending || isDeletePending} size={'sm'} variant={'ghost'} onClick={handleDelete}>
+                    Delete
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <div className='mt-4 p-2'>
-            <h2 className='text-xl font-semibold mb-2'>概要</h2>
-            <p className='text-sm text-foreground'>{data?.project.description}</p>
+          <div className='flex space-x-4 items-center'>
+            <div className='felx items-center'>
+              <span className='text-sm'>Status: </span>
+              <Badge variant={'default'}>{data?.project.status}</Badge>
+            </div>
+            <p className='text-sm'>Created on: {data?.project.dueDate}</p>
+          </div>
+          <div className='indent-1 line-clamp-2'>
+            <p>{data?.project.description}</p>
           </div>
         </div>
       )}
