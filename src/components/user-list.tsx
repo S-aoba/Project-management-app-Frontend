@@ -16,15 +16,15 @@ export const UserList = () => {
   const { data, isPending } = useProject(projectId)
 
   // const [ConfirDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
-  const onDelete = async (id: number) => {
-    const ok = await confirm()
-    return
-  }
+  // const onDelete = async (id: number) => {
+  //   const ok = await confirm()
+  //   return
+  // }
 
   return (
-    <div className='h-full flex flex-col space-y-4 py-8 px-2 w-40 border-l'>
+    <div className='h-full flex flex-col space-y-4 py-8 px-2 w-40'>
       {/* <ConfirDialog /> */}
-      <h1 className='text-muted-foreground text-sm'>Participating User List</h1>
+      <h1 className='text-muted-foreground text-sm'>Member</h1>
       {isPending ? (
         <div className='h-full p-2 space-y-4'>
           <div className='flex w-full space-x-2'>
@@ -41,7 +41,7 @@ export const UserList = () => {
           </div>
         </div>
       ) : (
-        data?.users.map((user) => <UserItem key={user.id} id={user.id} name={user.name} onDelete={onDelete} />)
+        data?.users.map((user) => <UserItem key={user.id} id={user.id} name={user.name} onDelete={() => {}} />)
       )}
     </div>
   )
