@@ -102,7 +102,7 @@ export const ProjectHeader = () => {
             </DropdownMenu>
           </div>
           <div className='flex space-x-4 items-center'>
-            <div className='felx items-center'>
+            <div className='flex items-center space-x-2'> 
               <span className='text-sm'>Status: </span>
               <Status status={data!.project.status} />
             </div>
