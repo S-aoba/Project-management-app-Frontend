@@ -13,8 +13,8 @@ export const NavigationItem = ({ name, id }: { name: string; id: number }) => {
     <Link href={`/projects/${id}`} className='w-full'>
       <div
         className={cn(
-          'p-2 text-center rounded-md group hover:cursor-pointer hover:bg-muted transition-colors duration-300 flex items-center justify-center text-white',
-          projectId === id && ' bg-white text-black hover:bg-white',
+          'p-2 text-center rounded-md group hover:cursor-pointer transition-colors duration-300 flex items-center justify-center hover:bg-accent',
+          projectId === id && ' bg-accent text-black hover:bg-accent',
         )}>
         <div className='w-4/5 flex items-center justify-start'>
           <Folder className='size-6 mr-2 group-hover:text-black transition-colors duration-300' />

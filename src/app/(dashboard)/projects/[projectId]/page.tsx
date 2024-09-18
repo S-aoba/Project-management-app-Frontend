@@ -7,7 +7,7 @@ export default function ProjectDetailPage() {
       <ProjectInfomation />
       {/* <UserList /> */}
 
-      <div className='col-span-1 bg-white  p-8 rounded-xl'>UserList</div>
+      <div className='col-span-1 p-8'>UserList</div>
     </div>
   )
 }

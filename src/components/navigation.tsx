@@ -23,9 +23,9 @@ export const Navigation = () => {
   return (
     <div className='h-full w-72 p-3 overflow-y-auto'>
       <div className='h-fit'>
-        <div className='flex items-center justify-between p-3 bg-white rounded-xl'>
+        <div className='flex items-center justify-between p-3 rounded-xl'>
           <DropdownMenu>
-            <DropdownMenuTrigger className='hover:bg-gray-100 p-2 rounded-xl transition-colors duration-300'>
+          <DropdownMenuTrigger className='hover:bg-accent p-2 rounded-xl transition-colors duration-300'>
               <div className='flex items-center'>
                 <Image src={'/cat-icon.jpg'} alt='userIcon' width={28} height={28} className='rounded-full mr-2' />
                 <span className='max-w-32 w-fit text-start text-sm truncate'>aoba_S</span>
@@ -48,7 +48,6 @@ export const Navigation = () => {
           </div>
         </div>
       </div>
-      <hr className='my-6 border-muted' />
       <div className='flex flex-col items-center space-y-4'>
         <Button
           onClick={() => setOpen(true)}
