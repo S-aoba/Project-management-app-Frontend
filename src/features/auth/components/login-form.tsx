@@ -84,7 +84,7 @@ export const LoginForm = () => {
       <div className='p-4 text-end'>
         <p className='text-sm text-foreground'>
           Don’t have an account? {''}
-          <Link href={'#'} className='text-blue-500 hover:underline hover:underline-offset-2'>
+          <Link href={'/register'} className='text-blue-500 hover:underline hover:underline-offset-2'>
             Create an account
           </Link>
         </p>
