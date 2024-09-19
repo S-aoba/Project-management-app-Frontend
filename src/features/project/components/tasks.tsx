@@ -1,10 +1,9 @@
 'use client'
 
-import { Loader2, Plus, Search } from 'lucide-react'
+import { Loader2, Plus } from 'lucide-react'
 import { useParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 
 import { columns } from '@/components/columns'
 import { DataTable } from '@/components/data-table'
@@ -36,17 +35,12 @@ export const Tasks = () => {
           <Plus className='size-4 mr-2' />
           Task
         </Button>
-        <div className='relative'>
-          <Search className='absolute text-gray-800/80 top-2.5 left-1.5 size-4'/>
-        <Input placeholder='search task...' className='w-96 pl-6'/>
-
-        </div>
       </div>
       <div className='h-full w-full flex justify-start items-start'>
         {isPending ? (
           <Loader2 className='size-8 text-slate-300 animate-spin' />
         ) : (
-          <DataTable columns={columns} data={data!.tasks} filterKey='name'/>
+          <DataTable columns={columns} data={data!.tasks} filterKey='name' />
         )}
       </div>
     </div>
