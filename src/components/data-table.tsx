@@ -14,6 +14,10 @@ import {
 } from '@tanstack/react-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { FilteringButton } from '@/features/task/components/filterting-status-button'
+import { useFilteringButton } from '@/features/task/store/use-filtering-button'
+import { XCircle } from 'lucide-react'
+import { Button } from './ui/button'
 import { Input } from './ui/input'
 
 interface DataTableProps<TData, TValue> {
@@ -22,10 +26,42 @@ interface DataTableProps<TData, TValue> {
   filterKey: string
 }
 
+const statusList = [
+  {
+    value: 'pending',
+    label: 'Pending',
+  },
+  {
+    value: 'is_progress',
+    label: 'Is_progress',
+  },
+  {
+    value: 'completed',
+    label: 'Completed',
+  },
+]
+
+const priorityList = [
+  {
+    value: 'low',
+    label: 'Low',
+  },
+  {
+    value: 'medium',
+    label: 'Medium',
+  },
+  {
+    value: 'high',
+    label: 'High',
+  },
+]
+
 export function DataTable<TData, TValue>({ columns, data, filterKey }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = React.useState({})
+
+  const [_state, setState] = useFilteringButton()
 
   const table = useReactTable({
     data,
@@ -45,13 +81,25 @@ export function DataTable<TData, TValue>({ columns, data, filterKey }: DataTable
 
   return (
     <div>
-      <div className='flex items-center py-4'>
+      <div className='flex items-center space-x-2 py-4'>
         <Input
           placeholder={`Filter ${filterKey}...`}
           value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ''}
           onChange={(event) => table.getColumn(filterKey)?.setFilterValue(event.target.value)}
           className='max-w-sm'
         />
+        <FilteringButton table={table} filterKey='status' filterKeyList={statusList} />
+        <FilteringButton table={table} filterKey='priority' filterKeyList={priorityList} />
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            setState({ status: '', priority: '' })
+
+            table.resetColumnFilters()
+          }}>
+          Reset
+          <XCircle className='size-4 ml-2' />
+        </Button>
       </div>
       <div className='rounded-md border'>
         <Table>
