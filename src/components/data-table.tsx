@@ -1,7 +1,5 @@
 'use client'
 
-import * as React from 'react'
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,13 +10,15 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { XCircle } from 'lucide-react'
+import * as React from 'react'
 
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+
 import { FilteringButton } from '@/features/task/components/filterting-status-button'
 import { useFilteringButton } from '@/features/task/store/use-filtering-button'
-import { XCircle } from 'lucide-react'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
