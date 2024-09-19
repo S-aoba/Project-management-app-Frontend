@@ -10,6 +10,8 @@ import { Action } from '@/features/task/components/action'
 import { Priority } from '@/features/task/components/priority'
 
 import { Task } from '@/types/type'
+import { ArrowUpDown } from 'lucide-react'
+import { Button } from './ui/button'
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -33,21 +35,49 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Status
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
+    },
     cell: ({ row }) => <Status status={row.original.status} />,
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Name
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: 'priority',
-    header: 'Priority',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Priority
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
+    },
     cell: ({ row }) => <Priority priority={row.original.priority} />,
   },
   {
     accessorKey: 'dueDate',
-    header: 'DueDate',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          DueDate
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: 'assignedUserId',
@@ -55,7 +85,14 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'createdAt',
-    header: 'CreatedAt',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          CreatedAt
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: 'action',

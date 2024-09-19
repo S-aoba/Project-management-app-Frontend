@@ -46,7 +46,7 @@ export const Tasks = () => {
         {isPending ? (
           <Loader2 className='size-8 text-slate-300 animate-spin' />
         ) : (
-          <DataTable columns={columns} data={data!.tasks} />
+          <DataTable columns={columns} data={data!.tasks} filterKey='name'/>
         )}
       </div>
     </div>
