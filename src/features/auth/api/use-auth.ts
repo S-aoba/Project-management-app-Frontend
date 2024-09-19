@@ -1,13 +1,21 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+
+import { useCsrfToken } from './use-csrf-token'
 
 import { useErrorMessage } from '@/hooks/use-error-message'
-import { toast } from 'sonner'
-import { useCsrfToken } from './use-csrf-token'
 
 type LoginProps = {
   email: string
   password: string
+}
+
+type RegisterProps = {
+  name: string
+  email: string
+  password: string
+  password_confirmation: string
 }
 
 export const useAuth = () => {
@@ -15,6 +23,37 @@ export const useAuth = () => {
   const { csrfToken, getCsrfToken } = useCsrfToken()
 
   const { conversionErrorMessage } = useErrorMessage()
+
+  const { mutate: register, isPending: isRegisterLoading } = useMutation({
+    mutationKey: ['register'],
+    mutationFn: async ({ name, email, password, password_confirmation }: RegisterProps) => {
+      await csrfToken()
+
+      const csrf = getCsrfToken()
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/register`, {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({ name, email, password, password_confirmation }),
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-XSRF-TOKEN': csrf!,
+        },
+      })
+
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.message)
+      }
+    },
+    onSuccess: (_, variables) => {
+      login({
+        email: variables.email,
+        password: variables.password,
+      })
+    },
+  })
 
   const { mutate: login, isPending: isLoginPending } = useMutation({
     mutationKey: ['login'],
@@ -82,5 +121,5 @@ export const useAuth = () => {
     },
   })
 
-  return { login, isLoginPending, logout, isLogoutError, isLogoutPending, error }
+  return { login, isLoginPending, logout, isLogoutError, isLogoutPending, error, register, isRegisterLoading }
 }
