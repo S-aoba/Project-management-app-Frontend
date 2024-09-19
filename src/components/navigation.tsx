@@ -8,12 +8,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Skeleton } from './ui/skeleton'
 
 import { useAuth } from '@/features/auth/api/use-auth'
+import { useCurrentUser } from '@/features/auth/api/use-current-user'
 import { useProjects } from '@/features/project/api/use-projects'
 import { useCreateProjectModal } from '@/features/project/store/use-create-project-modal'
 
 import { NavigationItem } from './navigation-item'
 
 export const Navigation = () => {
+  const { data: user, isPending } = useCurrentUser()
   const { data, isLoading } = useProjects()
 
   const [_open, setOpen] = useCreateProjectModal()
@@ -25,11 +27,20 @@ export const Navigation = () => {
       <div className='h-fit'>
         <div className='flex items-center justify-between p-3 rounded-xl'>
           <DropdownMenu>
-          <DropdownMenuTrigger className='hover:bg-accent p-2 rounded-xl transition-colors duration-300'>
+            <DropdownMenuTrigger className='hover:bg-accent p-2 rounded-xl transition-colors duration-300'>
               <div className='flex items-center'>
-                <Image src={'/cat-icon.jpg'} alt='userIcon' width={28} height={28} className='rounded-full mr-2' />
-                <span className='max-w-32 w-fit text-start text-sm truncate'>aoba_S</span>
-                <ChevronDown className='size-4 ml-2' />
+                {isPending ? (
+                  <>
+                    <Skeleton className='rounded-full size-7 mr-2' />
+                    <Skeleton className='rounded w-16 h-5' />
+                  </>
+                ) : (
+                  <>
+                    <Image src={'/cat-icon.jpg'} alt='userIcon' width={28} height={28} className='rounded-full mr-2' />
+                    <span className='max-w-32 w-fit text-start text-sm truncate'>{user?.name}</span>
+                    <ChevronDown className='size-4 ml-2' />
+                  </>
+                )}
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
