@@ -106,7 +106,8 @@ export const ProjectHeader = () => {
               <span className='text-sm'>Status: </span>
               <Status status={data!.project.status} />
             </div>
-            <p className='text-sm'>Created on: {data?.project.dueDate}</p>
+            <p className='text-sm'>Due date: {data?.project.dueDate}</p>
+            <p className='text-sm'>Created on: {data?.project.createdAt}</p>
           </div>
           <div className='indent-1 line-clamp-2'>
             <p>{data?.project.description}</p>
