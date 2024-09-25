@@ -1,6 +1,6 @@
 'use client'
 
-import { BellIcon, ChevronDown, LogOut, Plus } from 'lucide-react'
+import { BellIcon, ChevronDown, KeyRound, LogOut, Plus } from 'lucide-react'
 import Image from 'next/image'
 
 import { Button } from './ui/button'
@@ -44,6 +44,14 @@ export const Navigation = () => {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+            <DropdownMenuItem>
+                <Button variant={'ghost'} onClick={() => {}} disabled={false}>
+                  <div className='flex items-center justify-center'>
+                    <KeyRound className='size-4 mr-2' />
+                    <span className='text-sm'>Use Invite Code</span>
+                  </div>
+                </Button>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <Button variant={'ghost'} onClick={() => logout()} disabled={isLogoutPending}>
                   <div className='flex items-center justify-center'>
