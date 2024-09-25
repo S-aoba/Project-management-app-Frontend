@@ -16,7 +16,7 @@ export const SubmitInviteCodeModal = () => {
   const [open, setOpen] = useSubmitInviteCodeModal()
 
   const { data: user } = useCurrentUser()
-  const { mutate } = useSubmitInviteCode({ setError })
+  const { mutate, isPending } = useSubmitInviteCode({ setError })
 
   const handleClose = () => {
     setOpen(false)
@@ -56,12 +56,12 @@ export const SubmitInviteCodeModal = () => {
             <Input
               name={'invitecode'}
               value={inviteCode}
-              disabled={false}
+              disabled={isPending}
               required
               placeholder='Enter the invite code'
               onChange={(e) => setInviteCode(e.target.value)}
             />
-            <Button type='submit' disabled={false} size={'sm'}>
+            <Button type='submit' disabled={isPending} size={'sm'}>
               submit
             </Button>
           </form>

@@ -24,7 +24,7 @@ export const GenerateInviteCodeModal = () => {
   const [inviteCode, setInviteCode] = useState<{ data: string; message: string } | null>(null)
   // const [error, setError] = useState<{ error: string; message: string } | null>(null)
 
-  const { mutate } = useGenerateInviteCode({ setInviteCode })
+  const { mutate, isPending } = useGenerateInviteCode({ setInviteCode })
 
   const handleClose = () => {
     setOpen(false)
@@ -88,7 +88,7 @@ export const GenerateInviteCodeModal = () => {
                   </Tooltip>
                 </TooltipProvider>
               )}
-              <Button type='submit' disabled={false} size={'sm'}>
+              <Button type='submit' disabled={isPending} size={'sm'}>
                 Generate
               </Button>
             </div>
