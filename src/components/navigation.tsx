@@ -1,6 +1,6 @@
 'use client'
 
-import { BellIcon, ChevronDown, LogOut, Plus } from 'lucide-react'
+import { BellIcon, ChevronDown, KeyRound, LogOut, Plus } from 'lucide-react'
 import Image from 'next/image'
 
 import { Button } from './ui/button'
@@ -13,12 +13,14 @@ import { useProjects } from '@/features/project/api/use-projects'
 import { useCreateProjectModal } from '@/features/project/store/use-create-project-modal'
 
 import { NavigationItem } from './navigation-item'
+import { useSubmitInviteCodeModal } from '@/features/project/store/use-submit-invite-code-modal'
 
 export const Navigation = () => {
   const { data: user, isPending } = useCurrentUser()
   const { data, isLoading } = useProjects()
 
   const [_open, setOpen] = useCreateProjectModal()
+  const [open, setSubmitInviteCodeModalOpen] = useSubmitInviteCodeModal()
 
   const { logout, isLogoutPending } = useAuth()
 
@@ -44,6 +46,14 @@ export const Navigation = () => {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+            <DropdownMenuItem>
+                <Button type='button' variant={'ghost'} onClick={() => {setSubmitInviteCodeModalOpen(true)}} disabled={false}>
+                  <div className='flex items-center justify-center'>
+                    <KeyRound className='size-4 mr-2' />
+                    <span className='text-sm'>Use Invite Code</span>
+                  </div>
+                </Button>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <Button variant={'ghost'} onClick={() => logout()} disabled={isLogoutPending}>
                   <div className='flex items-center justify-center'>

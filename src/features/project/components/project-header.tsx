@@ -1,7 +1,7 @@
 'use client'
 
 import { useQueryClient } from '@tanstack/react-query'
-import { Edit, EllipsisVertical, Trash2 } from 'lucide-react'
+import { Edit, EllipsisVertical, KeyRound, Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 
@@ -15,7 +15,9 @@ import { useDeleteProject } from '../api/use-delete-project'
 import { useProject } from '../api/use-project'
 
 import { Status } from '@/components/status'
+import { useCurrentUser } from '@/features/auth/api/use-current-user'
 import { useEditProjectSheet } from '../store/use-edit-project-sheet'
+import { useGenerateInviteCodeModal } from '../store/use-generate-invite-code-modal'
 
 export const ProjectHeader = () => {
   const queryClient = useQueryClient()
@@ -24,11 +26,15 @@ export const ProjectHeader = () => {
   const projectId = Number(params.projectId)
 
   const { data, isPending } = useProject(projectId)
+  const { data: currUser } = useCurrentUser()
+  const role = data?.users.filter((user) => user.id === currUser?.id)[0]?.role
 
   const { mutate, isPending: isDeletePending } = useDeleteProject()
 
   const [ConfirmDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
-  const [_open, setOpen] = useEditProjectSheet()
+  const [_open, setEditProjectSheetOpen] = useEditProjectSheet()
+
+  const [__open, setInviteCodeModalOpen] = useGenerateInviteCodeModal()
 
   const handleDelete = async () => {
     const ok = await confirm()
@@ -88,7 +94,7 @@ export const ProjectHeader = () => {
                     disabled={isPending || isDeletePending}
                     size={'sm'}
                     variant={'ghost'}
-                    onClick={() => setOpen(true)}>
+                    onClick={() => setEditProjectSheetOpen(true)}>
                     Edit
                   </Button>
                 </DropdownMenuItem>
@@ -98,11 +104,23 @@ export const ProjectHeader = () => {
                     Delete
                   </Button>
                 </DropdownMenuItem>
+                {role === 'admin' && (
+                  <DropdownMenuItem>
+                    <KeyRound className='size-4' />
+                    <Button
+                      disabled={isPending || isDeletePending}
+                      size={'sm'}
+                      variant={'ghost'}
+                      onClick={() => setInviteCodeModalOpen(true)}>
+                      Generate invite code
+                    </Button>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
           <div className='flex space-x-4 items-center'>
-            <div className='flex items-center space-x-2'> 
+            <div className='flex items-center space-x-2'>
               <span className='text-sm'>Status: </span>
               <Status status={data!.project.status} />
             </div>

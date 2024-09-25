@@ -30,6 +30,7 @@ export type Task = {
 export type User = {
   id: number
   name: string
+  role: 'admin' | 'member'
 }
 
 export type ValidationErrorType = {
