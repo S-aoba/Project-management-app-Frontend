@@ -32,7 +32,7 @@ export const ProjectHeader = () => {
   const { mutate, isPending: isDeletePending } = useDeleteProject()
 
   const [ConfirmDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
-  const [_open, setOpen] = useEditProjectSheet()
+  const [_open, setEditProjectSheetOpen] = useEditProjectSheet()
 
   const [__open, setInviteCodeModalOpen] = useGenerateInviteCodeModal()
 
@@ -94,7 +94,7 @@ export const ProjectHeader = () => {
                     disabled={isPending || isDeletePending}
                     size={'sm'}
                     variant={'ghost'}
-                    onClick={() => setOpen(true)}>
+                    onClick={() => setEditProjectSheetOpen(true)}>
                     Edit
                   </Button>
                 </DropdownMenuItem>
