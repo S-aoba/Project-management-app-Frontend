@@ -22,9 +22,9 @@ export const GenerateInviteCodeModal = () => {
   const [copied, setCopied] = useState(false)
   const [tooltipOpen, setTooltipOpen] = useState(false)
   const [inviteCode, setInviteCode] = useState<{ data: string; message: string } | null>(null)
-  // const [error, setError] = useState<{ error: string; message: string } | null>(null)
+  const [error, setError] = useState('')
 
-  const { mutate, isPending } = useGenerateInviteCode({ setInviteCode })
+  const { mutate, isPending } = useGenerateInviteCode({ setInviteCode, setError })
 
   const handleClose = () => {
     setOpen(false)
@@ -65,7 +65,8 @@ export const GenerateInviteCodeModal = () => {
         <DialogHeader>
           <DialogTitle>Generate Invite Code</DialogTitle>
           <DialogDescription />
-          <div className='text-sm text-yellow-500/80'>{inviteCode?.message}</div>
+          {inviteCode && <div className='text-sm text-yellow-500/80'>{inviteCode?.message}</div>}
+          {error && <div className='text-sm text-red-500'>{error}</div>}
           <form className='flex items-center space-x-4' onSubmit={handleSubmit}>
             <Input
               readOnly

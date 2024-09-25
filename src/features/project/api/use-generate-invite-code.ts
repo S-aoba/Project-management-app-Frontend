@@ -18,9 +18,10 @@ type Props = {
       message: string
     } | null>
   >
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const useGenerateInviteCode = ({ setInviteCode }: Props) => {
+export const useGenerateInviteCode = ({ setInviteCode, setError }: Props) => {
   const queryClient = useQueryClient()
 
   const { csrfToken, getCsrfToken } = useCsrfToken()
@@ -43,7 +44,7 @@ export const useGenerateInviteCode = ({ setInviteCode }: Props) => {
 
     if (!res.ok) {
       const error = await res.json()
-      throw new Error(JSON.stringify(error))
+      throw new Error(error.message)
     }
 
     return res.json()
@@ -54,6 +55,9 @@ export const useGenerateInviteCode = ({ setInviteCode }: Props) => {
     mutationFn: (props: RequestType) => fetchInvitecode(props),
     onSuccess(data) {
       setInviteCode(data)
+    },
+    onError(error: Error) {
+      setError(error.message)
     },
   })
   return { mutate, isPending }
