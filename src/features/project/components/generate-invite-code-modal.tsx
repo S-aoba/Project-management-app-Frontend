@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input'
 
 import { useInviteCode } from '../api/use-invite-code'
 
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Copy } from 'lucide-react'
 import { useGenerateInviteCodeModal } from '../store/use-generate-invite-code-modal'
 
 export const GenerateInviteCodeModal = () => {
@@ -17,6 +19,8 @@ export const GenerateInviteCodeModal = () => {
 
   const [open, setOpen] = useGenerateInviteCodeModal()
 
+  const [copied, setCopied] = useState(false)
+  const [tooltipOpen, setTooltipOpen] = useState(false)
   const [inviteCode, setInviteCode] = useState<{ data: string; message: string } | null>(null)
   // const [error, setError] = useState<{ error: string; message: string } | null>(null)
 
@@ -25,11 +29,30 @@ export const GenerateInviteCodeModal = () => {
   const handleClose = () => {
     setOpen(false)
 
-    setInviteCode(null)
+    setTimeout(() => {
+      setInviteCode(null)
+      setCopied(false)
+      setTooltipOpen(false)
+    }, 500)
+  }
+
+  const handleCopy = () => {
+    if (inviteCode) {
+      navigator.clipboard.writeText(inviteCode.data)
+      setCopied(true)
+      setTooltipOpen(true)
+      setTimeout(() => {
+        setCopied(false)
+      }, 2000)
+    }
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    setInviteCode(null)
+    setCopied(false)
+    setTooltipOpen(false)
 
     mutate({
       projectId,
@@ -42,23 +65,34 @@ export const GenerateInviteCodeModal = () => {
         <DialogHeader>
           <DialogTitle>Generate Invite Code</DialogTitle>
           <DialogDescription />
+          <div className='text-sm text-yellow-500/80'>{inviteCode?.message}</div>
           <form className='flex items-center space-x-4' onSubmit={handleSubmit}>
             <Input
               readOnly
               name={'invitecode'}
               value={inviteCode?.data ? inviteCode.data : ''}
-              disabled={false}
+              disabled={true}
               required
-              autoFocus
-              minLength={3}
               placeholder='Invite code'
-              onChange={() => {}}
             />
-            <Button type='submit' disabled={false}>
-              Generate
-            </Button>
+            <div className='flex'>
+              {inviteCode?.data && (
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip open={tooltipOpen} onOpenChange={() => setTooltipOpen(!tooltipOpen)}>
+                    <TooltipTrigger asChild>
+                      <Button type='button' variant={'outline'} className='mr-2' size={'icon'} onClick={handleCopy}>
+                        <Copy className='size-4' />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{copied ? 'copied!' : 'Click Copy invite code'}</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              <Button type='submit' disabled={false} size={'sm'}>
+                Generate
+              </Button>
+            </div>
           </form>
-          <div className='text-sm'>{inviteCode?.message}</div>
         </DialogHeader>
       </DialogContent>
     </Dialog>
