@@ -1,30 +1,39 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 
-import { ActionError } from '@/components/action-error'
+import { useInviteCode } from '../api/use-invite-code'
 
-import { ValidationErrorType } from '@/types/type'
 import { useGenerateInviteCodeModal } from '../store/use-generate-invite-code-modal'
 
 export const GenerateInviteCodeModal = () => {
-  const router = useRouter()
+  const params = useParams()
+  const projectId = Number(params.projectId)
 
   const [open, setOpen] = useGenerateInviteCodeModal()
 
-  const [errors, setErrors] = useState<ValidationErrorType | null>(null)
+  const [inviteCode, setInviteCode] = useState<{ data: string; message: string } | null>(null)
+  // const [error, setError] = useState<{ error: string; message: string } | null>(null)
+
+  const { mutate } = useInviteCode({ setInviteCode })
 
   const handleClose = () => {
     setOpen(false)
+
+    setInviteCode(null)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    mutate({
+      projectId,
+    })
   }
 
   return (
@@ -32,11 +41,12 @@ export const GenerateInviteCodeModal = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Generate Invite Code</DialogTitle>
-          {errors && <ActionError {...errors} />}
           <DialogDescription />
           <form className='flex items-center space-x-4' onSubmit={handleSubmit}>
             <Input
-              name={''}
+              readOnly
+              name={'invitecode'}
+              value={inviteCode?.data ? inviteCode.data : ''}
               disabled={false}
               required
               autoFocus
@@ -48,6 +58,7 @@ export const GenerateInviteCodeModal = () => {
               Generate
             </Button>
           </form>
+          <div className='text-sm'>{inviteCode?.message}</div>
         </DialogHeader>
       </DialogContent>
     </Dialog>
