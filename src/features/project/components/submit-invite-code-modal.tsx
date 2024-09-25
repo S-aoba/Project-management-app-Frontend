@@ -11,27 +11,38 @@ import { useSubmitInviteCodeModal } from '../store/use-submit-invite-code-modal'
 
 export const SubmitInviteCodeModal = () => {
   const [inviteCode, setInviteCode] = useState('')
+  const [error, setError] = useState('')
 
   const [open, setOpen] = useSubmitInviteCodeModal()
 
   const { data: user } = useCurrentUser()
-  const { mutate } = useSubmitInviteCode()
+  const { mutate } = useSubmitInviteCode({ setError })
 
   const handleClose = () => {
     setOpen(false)
+
+    setTimeout(() => {
+      setError('')
+      setInviteCode('')
+    }, 500)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
-    if (user) {
-      mutate({
-        inviteCode,
-        userId: user.id,
-      })
-    }
 
-    handleClose()
+    if (user) {
+      mutate(
+        {
+          inviteCode,
+          userId: user.id,
+        },
+        {
+          onSuccess() {
+            handleClose()
+          },
+        },
+      )
+    }
   }
 
   return (
@@ -40,6 +51,7 @@ export const SubmitInviteCodeModal = () => {
         <DialogHeader>
           <DialogTitle>Submit Invite Code</DialogTitle>
           <DialogDescription />
+          <div className='text-sm text-red-500'>{error}</div>
           <form className='flex items-center space-x-4' onSubmit={handleSubmit}>
             <Input
               name={'invitecode'}

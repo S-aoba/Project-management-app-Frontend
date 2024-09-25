@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
-import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 type RequestType = {
   inviteCode: string
@@ -14,7 +14,11 @@ type ResponseType = {
   message: string
 }
 
-export const useSubmitInviteCode = () => {
+type Props = {
+  setError: React.Dispatch<React.SetStateAction<string>>
+}
+
+export const useSubmitInviteCode = ({ setError }: Props) => {
   const queryClient = useQueryClient()
   const router = useRouter()
 
@@ -38,7 +42,7 @@ export const useSubmitInviteCode = () => {
 
     if (!res.ok) {
       const error = await res.json()
-      throw new Error(JSON.stringify(error.message))
+      throw new Error(error.message)
     }
 
     return res.json()
@@ -48,13 +52,13 @@ export const useSubmitInviteCode = () => {
     mutationFn: (props: RequestType) => fetchInvitecode(props),
     onSuccess(data) {
       toast.success(data.message)
-      
+
       router.push(`/projects/${data.projectId}`)
 
-      queryClient.invalidateQueries({queryKey: ['userProjects']})
+      queryClient.invalidateQueries({ queryKey: ['userProjects'] })
     },
-    onError(error) {
-      console.log(error.message)
+    onError(error: Error) {
+      setError(error.message)
     },
   })
   return { mutate, isPending }
