@@ -27,7 +27,7 @@ export const ProjectHeader = () => {
 
   const { data, isPending } = useProject(projectId)
   const { data: currUser } = useCurrentUser()
-  const role = data?.users.filter((user) => user.id === currUser?.id)[0].role
+  const role = data?.users.filter((user) => user.id === currUser?.id)[0]?.role
 
   const { mutate, isPending: isDeletePending } = useDeleteProject()
 
