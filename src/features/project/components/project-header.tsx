@@ -17,6 +17,7 @@ import { useProject } from '../api/use-project'
 import { Status } from '@/components/status'
 import { useCurrentUser } from '@/features/auth/api/use-current-user'
 import { useEditProjectSheet } from '../store/use-edit-project-sheet'
+import { useGenerateInviteCodeModal } from '../store/use-generate-invite-code-modal'
 
 export const ProjectHeader = () => {
   const queryClient = useQueryClient()
@@ -32,6 +33,8 @@ export const ProjectHeader = () => {
 
   const [ConfirmDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
   const [_open, setOpen] = useEditProjectSheet()
+
+  const [__open, setInviteCodeModalOpen] = useGenerateInviteCodeModal()
 
   const handleDelete = async () => {
     const ok = await confirm()
@@ -108,7 +111,7 @@ export const ProjectHeader = () => {
                       disabled={isPending || isDeletePending}
                       size={'sm'}
                       variant={'ghost'}
-                      onClick={() => setOpen(true)}>
+                      onClick={() => setInviteCodeModalOpen(true)}>
                       Generate invite code
                     </Button>
                   </DropdownMenuItem>
