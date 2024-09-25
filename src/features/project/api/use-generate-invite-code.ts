@@ -20,7 +20,7 @@ type Props = {
   >
 }
 
-export const useInviteCode = ({ setInviteCode }: Props) => {
+export const useGenerateInviteCode = ({ setInviteCode }: Props) => {
   const queryClient = useQueryClient()
 
   const { csrfToken, getCsrfToken } = useCsrfToken()

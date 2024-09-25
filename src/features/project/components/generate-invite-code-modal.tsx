@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 
-import { useInviteCode } from '../api/use-invite-code'
+import { useGenerateInviteCode } from '../api/use-generate-invite-code'
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Copy } from 'lucide-react'
@@ -24,7 +24,7 @@ export const GenerateInviteCodeModal = () => {
   const [inviteCode, setInviteCode] = useState<{ data: string; message: string } | null>(null)
   // const [error, setError] = useState<{ error: string; message: string } | null>(null)
 
-  const { mutate } = useInviteCode({ setInviteCode })
+  const { mutate } = useGenerateInviteCode({ setInviteCode })
 
   const handleClose = () => {
     setOpen(false)
