@@ -19,21 +19,10 @@ export const useEditTask = (taskId: number | undefined) => {
 
     const csrf = getCsrfToken()
 
-    const taskData = {
-      name: props.name,
-      description: props.description,
-      due_date: props.dueDate,
-      status: props.status,
-      image_path: props.imagePath,
-      priority: props.priority,
-      assigned_user_id: props.assignedUserId,
-      project_id: props.projectId,
-    }
-
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/tasks/${taskId}`, {
       method: 'PUT',
       credentials: 'include',
-      body: JSON.stringify(taskData),
+      body: JSON.stringify(props),
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

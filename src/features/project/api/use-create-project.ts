@@ -19,18 +19,10 @@ export const useCreateProject = () => {
 
     const csrf = getCsrfToken()
 
-    const projectData = {
-      name: props.name,
-      description: props.description,
-      due_date: props.dueDate,
-      status: props.status,
-      image_path: props.imagePath,
-    }
-
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/projects`, {
       method: 'POST',
       credentials: 'include',
-      body: JSON.stringify(projectData),
+      body: JSON.stringify(props),
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
