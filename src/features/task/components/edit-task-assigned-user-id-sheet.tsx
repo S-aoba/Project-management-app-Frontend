@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -9,9 +10,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 
 import { useProject } from '@/features/project/api/use-project'
 
-import { ActionError } from '@/components/action-error'
-
-import { ValidationErrorType } from '@/types/type'
+import { useEditTaskAssignedUserId } from '../api/use-edit-task-assigned-user-id'
 import { useEditTaskAssignedUserIdSheet } from '../store/use-edit-task-assigned-user-id-sheet'
 
 export const EditTaskAssignedUserIdSheet = () => {
@@ -20,11 +19,14 @@ export const EditTaskAssignedUserIdSheet = () => {
   const { data } = useProject(projectId)
   const [open, setEditTaskAssignedUserIdSheet] = useEditTaskAssignedUserIdSheet()
 
-  // const { mutate, isPending } = useEditTask(open.id)
+  const { mutate, isPending } = useEditTaskAssignedUserId({
+    taskId: open.id,
+    projectId,
+  })
 
   const [assignedUserId, setAssignedUserId] = useState<number>(0)
 
-  const [errors, setErrors] = useState<ValidationErrorType | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (data && open.id) {
@@ -41,14 +43,29 @@ export const EditTaskAssignedUserIdSheet = () => {
 
     setTimeout(() => {
       setAssignedUserId(0)
-      setErrors(null)
+      setError(null)
     }, 500)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    //
+    mutate(
+      {
+        newAssignedUserId: assignedUserId,
+      },
+      {
+        onSuccess(data) {
+          handleClose()
+
+          toast.success(data.message)
+        },
+        onError(error) {
+          const errorMessage = JSON.parse(error.message).message
+          setError(errorMessage)
+        },
+      },
+    )
   }
 
   return (
@@ -56,7 +73,11 @@ export const EditTaskAssignedUserIdSheet = () => {
       <SheetContent side={'bottom'}>
         <SheetHeader>
           <SheetTitle>Edit Task Assigned User ID</SheetTitle>
-          {errors && <ActionError {...errors} />}
+          {error && (
+            <div>
+              <p className='text-sm text-red-500'>{error}</p>
+            </div>
+          )}
           <SheetDescription />
         </SheetHeader>
         <form className='space-y-4' onSubmit={handleSubmit}>
@@ -67,17 +88,16 @@ export const EditTaskAssignedUserIdSheet = () => {
             onChange={(e) => {
               setAssignedUserId(Number(e.target.value))
             }}
-            disabled={false}
+            disabled={isPending}
             required
             autoFocus
-            minLength={3}
             placeholder='Task Assigned User ID'
           />
           <div className='flex justify-end space-x-4'>
-            <Button variant={'outline'} type='button' disabled={false} onClick={() => handleClose()}>
+            <Button variant={'outline'} type='button' disabled={isPending} onClick={() => handleClose()}>
               Cancel
             </Button>
-            <Button disabled={false}>Edit</Button>
+            <Button disabled={isPending}>Edit</Button>
           </div>
         </form>
       </SheetContent>
