@@ -4,10 +4,7 @@ import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 
 import { Task } from '@/types/type'
 
-type RequestType = Pick<
-  Task,
-  'name' | 'description' | 'status' | 'dueDate' | 'imagePath' | 'assignedUserId' | 'priority' | 'projectId'
->
+type RequestType = Pick<Task, 'name' | 'description' | 'status' | 'dueDate' | 'imagePath' | 'priority' | 'projectId'>
 
 export const useEditTask = (taskId: number | undefined) => {
   const queryClient = useQueryClient()

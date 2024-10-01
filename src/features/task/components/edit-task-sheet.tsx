@@ -37,7 +37,6 @@ export const EditTaskSheet = () => {
   const [status, setStatus] = useState<'pending' | 'is_progress' | 'completed'>('pending')
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low')
   const [date, setDate] = useState<Date | undefined>(undefined)
-  const [assignedUserId, setAssignedUserId] = useState<number>(0)
   const [projectIdState, setProjectId] = useState<number>(0)
 
   const [errors, setErrors] = useState<ValidationErrorType | null>(null)
@@ -50,7 +49,6 @@ export const EditTaskSheet = () => {
           setDescription(item.description)
           setStatus(item.status)
           setDate(new Date(item.dueDate))
-          setAssignedUserId(item.assignedUserId)
           setProjectId(item.projectId)
         }
       })
@@ -65,7 +63,6 @@ export const EditTaskSheet = () => {
       setDescription('')
       setStatus('pending')
       setDate(undefined)
-      setAssignedUserId(0)
       setProjectId(0)
       setErrors(null)
     }, 500)
@@ -85,7 +82,6 @@ export const EditTaskSheet = () => {
         priority,
         imagePath: null,
         dueDate,
-        assignedUserId,
         projectId: projectIdState,
       },
       {
