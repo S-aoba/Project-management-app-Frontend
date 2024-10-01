@@ -2,11 +2,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 
-import { Task } from '@/types/type'
+type RequestType = {
+  newAssignedUserId: number
+}
 
-type RequestType = Pick<Task, 'name' | 'description' | 'status' | 'dueDate' | 'imagePath' | 'priority' | 'projectId'>
+type Props = {
+  taskId: number | undefined
+  projectId: number | undefined
+}
 
-export const useEditTask = (taskId: number | undefined) => {
+export const useEditTaskAssignedUserId = ({ taskId, projectId }: Props) => {
   const queryClient = useQueryClient()
 
   const { csrfToken, getCsrfToken } = useCsrfToken()
@@ -16,8 +21,8 @@ export const useEditTask = (taskId: number | undefined) => {
 
     const csrf = getCsrfToken()
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/tasks/${taskId}`, {
-      method: 'PUT',
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/tasks/${taskId}/assigned_user_id`, {
+      method: 'PATCH',
       credentials: 'include',
       body: JSON.stringify(props),
       headers: {
@@ -37,10 +42,8 @@ export const useEditTask = (taskId: number | undefined) => {
   const { mutate, isPending } = useMutation({
     mutationKey: ['editTask', taskId],
     mutationFn: (props: RequestType) => editTask(props),
-    onSuccess(_, variables) {
-      queryClient.invalidateQueries({ queryKey: ['userProjects'] })
-
-      queryClient.invalidateQueries({ queryKey: ['project', variables.projectId] })
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['project', projectId] })
     },
   })
 
