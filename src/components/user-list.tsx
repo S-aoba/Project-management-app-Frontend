@@ -6,8 +6,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 // import { useConfirm } from '@/hooks/use-confirm'
 
-import { UserItem } from '@/app/user-item'
 import { useProject } from '@/features/project/api/use-project'
+import { UserItem } from './user-item'
 
 export const UserList = () => {
   const params = useParams()
