@@ -102,7 +102,7 @@ export const EditTaskSheet = () => {
     <Sheet open={open.isOpen} onOpenChange={handleClose}>
       <SheetContent side={'bottom'}>
         <SheetHeader>
-          <SheetTitle>Edit Project</SheetTitle>
+          <SheetTitle>Edit Task</SheetTitle>
           {errors && <ActionError {...errors} />}
           <SheetDescription />
         </SheetHeader>
@@ -115,7 +115,7 @@ export const EditTaskSheet = () => {
             required
             autoFocus
             minLength={3}
-            placeholder='Project name'
+            placeholder='Task name'
           />
           <Input
             value={description || ''}
@@ -124,7 +124,7 @@ export const EditTaskSheet = () => {
             disabled={isPending}
             required
             minLength={3}
-            placeholder='Project Description'
+            placeholder='Task Description'
           />
           <Select
             value={status}
@@ -132,7 +132,7 @@ export const EditTaskSheet = () => {
             onValueChange={(e) => setStatus(e as 'pending' | 'is_progress' | 'completed')}
             required>
             <SelectTrigger>
-              <SelectValue placeholder='Project Status' />
+              <SelectValue placeholder='Task Status' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='pending'>pending</SelectItem>
@@ -146,7 +146,7 @@ export const EditTaskSheet = () => {
             onValueChange={(e) => setPriority(e as 'low' | 'medium' | 'high')}
             required>
             <SelectTrigger>
-              <SelectValue placeholder='Project Priority' />
+              <SelectValue placeholder='Task Priority' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='low'>low</SelectItem>
