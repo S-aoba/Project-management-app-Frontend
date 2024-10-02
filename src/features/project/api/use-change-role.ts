@@ -25,15 +25,28 @@ export const useChangeRole = ({ setError }: Props) => {
 
     const csrf = getCsrfToken()
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/projects/${props.projectId}/users/${props.userId}/role`, {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'X-XSRF-TOKEN': csrf!,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_API}/api/projects/${props.projectId}/users/${props.userId}/role`,
+      {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-XSRF-TOKEN': csrf!,
+        },
       },
-    })
+    )
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        throw new Error("It looks like the user doesn't exist. Please verify the username or ID.")
+      }
+
+      const error = await res.json()
+
+      throw new Error(error.message)
+    }
 
     return res.json()
   }
@@ -41,7 +54,10 @@ export const useChangeRole = ({ setError }: Props) => {
   const { mutate, isPending } = useMutation({
     mutationFn: (props: RequestType) => fetchInvitecode(props),
     onSuccess(_, variables) {
-      queryClient.invalidateQueries({queryKey: ['project', variables.projectId]})
+      queryClient.invalidateQueries({ queryKey: ['project', variables.projectId] })
+    },
+    onError(error) {
+      setError(error.message)
     },
   })
   return { mutate, isPending }
