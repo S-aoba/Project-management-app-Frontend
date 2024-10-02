@@ -81,7 +81,7 @@ export const UserList = () => {
               {members &&
                 members.map((member) =>
                   isAdmin ? (
-                    <DropdownMenu>
+                    <DropdownMenu key={member.id}>
                       <DropdownMenuTrigger>
                         <div className='flex items-center p-2 text-center rounded-md group hover:cursor-pointer hover:bg-muted transition-colors duration-300'>
                           <Avatar className='size-8'>
@@ -113,7 +113,7 @@ export const UserList = () => {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   ) : (
-                    <div className='flex items-center p-2 text-center'>
+                    <div className='flex items-center p-2 text-center' key={member.id}>
                       <Avatar className='size-8'>
                         <AvatarImage src='#' />
                         <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
