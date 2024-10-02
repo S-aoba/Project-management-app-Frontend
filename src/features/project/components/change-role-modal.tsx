@@ -17,7 +17,7 @@ export const ChangeRoleModal = () => {
   const params = useParams()
   const projectId = Number(params.projectId)
 
-  const [role, setRole] = useState('')
+  const [role, setRole] = useState<'admin' | undefined>(undefined)
   const [error, setError] = useState('')
 
   const [open, setOpen] = useChangeRoleModal()
@@ -33,7 +33,7 @@ export const ChangeRoleModal = () => {
 
     setTimeout(() => {
       setError('')
-      setRole('')
+      setRole(undefined)
     }, 500)
   }
 
@@ -71,7 +71,7 @@ export const ChangeRoleModal = () => {
               value={role}
               name={'role'}
               onValueChange={(e) => {
-                setRole(e)
+                setRole(e as 'admin')
               }}
               required>
               <SelectTrigger>
