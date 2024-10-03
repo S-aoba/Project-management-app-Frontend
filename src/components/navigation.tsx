@@ -12,8 +12,8 @@ import { useCurrentUser } from '@/features/auth/api/use-current-user'
 import { useProjects } from '@/features/project/api/use-projects'
 import { useCreateProjectModal } from '@/features/project/store/use-create-project-modal'
 
-import { NavigationItem } from './navigation-item'
 import { useSubmitInviteCodeModal } from '@/features/project/store/use-submit-invite-code-modal'
+import { NavigationItem } from './navigation-item'
 
 export const Navigation = () => {
   const { data: user, isPending } = useCurrentUser()
@@ -46,21 +46,20 @@ export const Navigation = () => {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-            <DropdownMenuItem>
-                <Button type='button' variant={'ghost'} onClick={() => {setSubmitInviteCodeModalOpen(true)}} disabled={false}>
-                  <div className='flex items-center justify-center'>
-                    <KeyRound className='size-4 mr-2' />
-                    <span className='text-sm'>Use Invite Code</span>
-                  </div>
-                </Button>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSubmitInviteCodeModalOpen(true)
+                }}>
+                <div className='flex items-center justify-center'>
+                  <KeyRound className='size-4 mr-2' />
+                  <span>Use Invite Code</span>
+                </div>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Button variant={'ghost'} onClick={() => logout()} disabled={isLogoutPending}>
-                  <div className='flex items-center justify-center'>
-                    <LogOut className='size-4 mr-2' />
-                    <span className='text-sm'>Logout</span>
-                  </div>
-                </Button>
+              <DropdownMenuItem onClick={() => logout()}>
+                <div className='flex items-center justify-center'>
+                  <LogOut className='size-4 mr-2' />
+                  <span>Logout</span>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
