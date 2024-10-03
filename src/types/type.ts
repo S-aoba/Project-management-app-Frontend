@@ -36,7 +36,7 @@ export type User = {
 export type ValidationErrorType = {
   name: string[]
   description: string[]
-  due_date: string[]
+  dueDate: string[]
   status: string[]
   priority: string[]
 }

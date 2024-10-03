@@ -12,7 +12,7 @@ export const ActionError = (error: ValidationErrorType) => {
       <AlertDescription>{error.name && error.name.map((m) => <li key={m}>{m}</li>)}</AlertDescription>
       <AlertDescription>{error.description && error.description.map((m) => <li key={m}>{m}</li>)}</AlertDescription>
       <AlertDescription>{error.status && error.status.map((m) => <li key={m}>{m}</li>)}</AlertDescription>
-      <AlertDescription>{error.due_date && error.due_date.map((m) => <li key={m}>{m}</li>)}</AlertDescription>
+      <AlertDescription>{error.dueDate && error.dueDate.map((m) => <li key={m}>{m}</li>)}</AlertDescription>
       <AlertDescription>{error.priority && error.priority.map((m) => <li key={m}>{m}</li>)}</AlertDescription>
     </Alert>
   )
