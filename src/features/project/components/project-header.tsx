@@ -88,32 +88,24 @@ export const ProjectHeader = () => {
                 <EllipsisVertical className='size-4' />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Edit className='size-4' />
-                  <Button
-                    disabled={isPending || isDeletePending}
-                    size={'sm'}
-                    variant={'ghost'}
-                    onClick={() => setEditProjectSheetOpen(true)}>
-                    Edit
-                  </Button>
+                <DropdownMenuItem onClick={() => setEditProjectSheetOpen(true)}>
+                  <div className='flex items-center justify-center'>
+                    <Edit className='size-4 mr-2' />
+                    <span>Edit</span>
+                  </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Trash2 className='size-4' />
-                  <Button disabled={isPending || isDeletePending} size={'sm'} variant={'ghost'} onClick={handleDelete}>
-                    Delete
-                  </Button>
+                <DropdownMenuItem onClick={handleDelete}>
+                  <div className='flex items-center justify-center'>
+                    <Trash2 className='size-4 mr-2' />
+                    <span>Delete</span>
+                  </div>
                 </DropdownMenuItem>
                 {role === 'admin' && (
-                  <DropdownMenuItem>
-                    <KeyRound className='size-4' />
-                    <Button
-                      disabled={isPending || isDeletePending}
-                      size={'sm'}
-                      variant={'ghost'}
-                      onClick={() => setInviteCodeModalOpen(true)}>
-                      Generate invite code
-                    </Button>
+                  <DropdownMenuItem onClick={() => setInviteCodeModalOpen(true)}>
+                    <div className='flex items-center justify-center'>
+                      <KeyRound className='size-4 mr-2' />
+                      <span>Generate invite code</span>
+                    </div>
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
