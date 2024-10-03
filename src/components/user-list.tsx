@@ -2,7 +2,8 @@
 
 import { Trash, User } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -15,9 +16,10 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
 
-// import { useConfirm } from '@/hooks/use-confirm'
+import { useConfirm } from '@/hooks/use-confirm'
 
 import { useCurrentUser } from '@/features/auth/api/use-current-user'
+import { useRemoveMember } from '@/features/project/api/use-remove-member'
 import { useProject } from '@/features/project/api/use-project'
 import { useChangeRoleModal } from '@/features/project/store/use-change-role-modal'
 
@@ -36,15 +38,32 @@ export const UserList = () => {
 
   const isAdmin = useMemo(() => currUser?.id === admin?.id, [data?.users, currUser])
 
-  // const [ConfirDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
-  // const onDelete = async (id: number) => {
-  //   const ok = await confirm()
-  //   return
-  // }
+  const [_error, setError] = useState<string>('')
+  const { mutate, isPending: isDeleteMemberPending } = useRemoveMember({ setError })
+  const [ConfirDialog, confirm] = useConfirm('Are you sure?', 'You are about to perform a delete action.')
+  const handleDelete = async (id: number) => {
+    const ok = await confirm()
+    if (ok) {
+      mutate(
+        {
+          projectId,
+          userId: id,
+        },
+        {
+          onSuccess(data) {
+            toast.success(data.message)
+          },
+          onError(error) {
+            toast.error(error.message)
+          },
+        },
+      )
+    }
+  }
 
   return (
     <div className='h-full flex flex-col space-y-4 py-8 px-2 w-40'>
-      {/* <ConfirDialog /> */}
+      <ConfirDialog />
       <h1 className='text-muted-foreground text-sm'>Member</h1>
       {isPending ? (
         <div className='h-full p-2 space-y-4'>
@@ -106,7 +125,7 @@ export const UserList = () => {
                           <User className='size-4 mr-2' />
                           Change Role
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => {}}>
+                        <DropdownMenuItem onClick={() => handleDelete(member.id)}>
                           <Trash className='size-4 mr-2' />
                           remove user
                         </DropdownMenuItem>
