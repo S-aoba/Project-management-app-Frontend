@@ -70,6 +70,8 @@ export const CreateProjectModal = () => {
         },
         onError(error) {
           const errorMessages: ValidationErrorType = JSON.parse(error.message).errors
+          console.log(errorMessages);
+          
           setErrors(errorMessages)
         },
       },
