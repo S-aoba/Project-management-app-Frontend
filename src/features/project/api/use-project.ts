@@ -35,12 +35,13 @@ export const useProject = (projectId: number) => {
     return res.json()
   }
 
-  const { data, isPending } = useQuery<ResponseType>({
+  const { data, isPending, isError } = useQuery<ResponseType>({
     queryKey: ['project', projectId],
     enabled: !!projectId,
     queryFn: fetchProject,
     staleTime: Infinity,
+    retry: false
   })
 
-  return { data, isPending }
+  return { data, isPending,isError }
 }

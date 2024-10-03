@@ -2,7 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query'
 import { Edit, EllipsisVertical, KeyRound, Trash2 } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { redirect, useParams } from 'next/navigation'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -25,7 +25,8 @@ export const ProjectHeader = () => {
   const params = useParams()
   const projectId = Number(params.projectId)
 
-  const { data, isPending } = useProject(projectId)
+  const { data, isPending, isError } = useProject(projectId)
+
   const { data: currUser } = useCurrentUser()
   const role = data?.users.filter((user) => user.id === currUser?.id)[0]?.role
 
@@ -55,6 +56,8 @@ export const ProjectHeader = () => {
       })
     }
   }
+
+  if (isError) redirect('/login')
 
   return (
     <>
