@@ -102,7 +102,6 @@ export const CreateTaskModal = () => {
               onChange={(e) => setDescription(e.target.value)}
               name={description}
               disabled={false}
-              required
               minLength={3}
               placeholder='Task Description'
             />

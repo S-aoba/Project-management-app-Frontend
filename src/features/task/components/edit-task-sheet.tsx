@@ -122,7 +122,6 @@ export const EditTaskSheet = () => {
             name={description || ''}
             onChange={(e) => setDescription(e.target.value)}
             disabled={isPending}
-            required
             minLength={3}
             placeholder='Task Description'
           />
