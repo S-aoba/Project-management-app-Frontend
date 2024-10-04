@@ -60,7 +60,7 @@ export const LoginForm = () => {
             <div className='flex flex-col'>
               <div className='flex justify-between items-center mb-2'>
                 <Label htmlFor='password'>Password</Label>
-                <Link href={'#'} className='text-[13px] text-blue-500 hover:underline hover:underline-offset-2'>
+                <Link href={'/password-reset'} className='text-[13px] text-blue-500 hover:underline hover:underline-offset-2'>
                   Forgot password?
                 </Link>
               </div>
