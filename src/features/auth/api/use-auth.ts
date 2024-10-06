@@ -48,10 +48,7 @@ export const useAuth = () => {
       }
     },
     onSuccess: (_, variables) => {
-      login({
-        email: variables.email,
-        password: variables.password,
-      })
+      router.push('/')
     },
   })
 
