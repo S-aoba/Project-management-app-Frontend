@@ -47,7 +47,7 @@ export const useAuth = () => {
         throw new Error(error.message)
       }
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       router.push('/')
     },
   })
