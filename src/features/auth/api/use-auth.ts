@@ -47,11 +47,8 @@ export const useAuth = () => {
         throw new Error(error.message)
       }
     },
-    onSuccess: (_, variables) => {
-      login({
-        email: variables.email,
-        password: variables.password,
-      })
+    onSuccess: () => {
+      router.push('/')
     },
   })
 

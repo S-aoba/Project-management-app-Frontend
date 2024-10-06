@@ -31,6 +31,7 @@ export type User = {
   id: number
   name: string
   role: 'admin' | 'member'
+  email_verified_at: string
 }
 
 export type ValidationErrorType = {

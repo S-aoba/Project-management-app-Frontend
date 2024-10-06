@@ -68,7 +68,6 @@ export const RegisterForm = () => {
               value={email}
               disabled={isRegisterLoading}
               onChange={(e) => setEmail(e.target.value)}
-              autoFocus
               type='email'
               placeholder='Email'
               required
