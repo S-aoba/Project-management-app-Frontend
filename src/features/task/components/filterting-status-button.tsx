@@ -1,7 +1,7 @@
 'use client'
 
 import { Table } from '@tanstack/react-table'
-import { Check, CirclePlus } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUp, Check, CircleCheck, CirclePause, CirclePlus, Timer } from 'lucide-react'
 import React from 'react'
 
 import { cn } from '@/lib/utils'
@@ -56,6 +56,12 @@ export function FilteringButton<TData>({ table, filterKey, filterKeyList }: Prop
               {filterKeyList.map((key) => (
                 <CommandItem key={key.value} value={key.value} onSelect={(event) => handleSelect(event)}>
                   <Check className={cn('mr-2 h-4 w-4', state[filterKey] === key.value ? 'opacity-100' : 'opacity-0')} />
+                  {key.value === 'pending' && <CirclePause className='size-4 mr-2' />}
+                  {key.value === 'progress' && <Timer className='size-4 mr-2' />}
+                  {key.value === 'completed' && <CircleCheck className='size-4 mr-2' />}
+                  {key.value === 'low' && <ArrowDown className='size-4 mr-2' />}
+                  {key.value === 'medium' && <ArrowRight className='size-4 mr-2' />}
+                  {key.value === 'high' && <ArrowUp className='size-4 mr-2' />}
                   {key.label}
                 </CommandItem>
               ))}
