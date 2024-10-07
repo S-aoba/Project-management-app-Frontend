@@ -35,7 +35,7 @@ export const EditProjectSheet = () => {
 
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string | null | undefined>(null)
-  const [status, setStatus] = useState<'pending' | 'is_progress' | 'completed'>('pending')
+  const [status, setStatus] = useState<'pending' | 'progress' | 'completed'>('pending')
   const [date, setDate] = useState<Date | undefined>(undefined)
 
   const [errors, setErrors] = useState<ValidationErrorType | null>(null)
@@ -121,15 +121,15 @@ export const EditProjectSheet = () => {
           <Select
             value={status}
             name={status}
-            onValueChange={(e) => setStatus(e as 'pending' | 'is_progress' | 'completed')}
+            onValueChange={(e) => setStatus(e as 'pending' | 'progress' | 'completed')}
             required>
             <SelectTrigger>
               <SelectValue placeholder='Project Status' />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value='pending'>pending</SelectItem>
-              <SelectItem value='is_progress'>is_progress</SelectItem>
-              <SelectItem value='completed'>completed</SelectItem>
+              <SelectItem value='pending'>Pending</SelectItem>
+              <SelectItem value='progress'>Progress</SelectItem>
+              <SelectItem value='completed'>Completed</SelectItem>
             </SelectContent>
           </Select>
           <Popover>

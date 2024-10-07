@@ -13,9 +13,9 @@ export const Status = ({ status }: Props) => {
     <div className='flex items-center'>
       <Badge variant={color}>
         {status === 'pending' && <CirclePause className='size-4 mr-2' />}
-        {status === 'is_progress' && <Timer className='size-4 mr-2' />}
+        {status === 'progress' && <Timer className='size-4 mr-2' />}
         {status === 'completed' && <CircleCheck className='size-4 mr-2' />}
-        {status}
+        <span className='capitalize'>{status}</span>
       </Badge>
     </div>
   )

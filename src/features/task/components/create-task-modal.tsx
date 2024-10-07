@@ -31,7 +31,7 @@ export const CreateTaskModal = () => {
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [status, setStatus] = useState<'pending' | 'is_progress' | 'completed'>('pending')
+  const [status, setStatus] = useState<'pending' | 'progress' | 'completed'>('pending')
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low')
   const [date, setDate] = useState<Date | undefined>(new Date())
 
@@ -108,15 +108,15 @@ export const CreateTaskModal = () => {
             <Select
               defaultValue={status}
               name={status}
-              onValueChange={(e) => setStatus(e as 'pending' | 'is_progress' | 'completed')}
+              onValueChange={(e) => setStatus(e as 'pending' | 'progress' | 'completed')}
               required>
               <SelectTrigger>
                 <SelectValue placeholder='Task Status' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='pending'>pending</SelectItem>
-                <SelectItem value='is_progress'>is_progress</SelectItem>
-                <SelectItem value='completd'>completd</SelectItem>
+                <SelectItem value='pending'>Pending</SelectItem>
+                <SelectItem value='progress'>Progress</SelectItem>
+                <SelectItem value='completd'>Completd</SelectItem>
               </SelectContent>
             </Select>
             <Select
@@ -128,9 +128,9 @@ export const CreateTaskModal = () => {
                 <SelectValue placeholder='Task Priority' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='low'>low</SelectItem>
-                <SelectItem value='medium'>medium</SelectItem>
-                <SelectItem value='high'>high</SelectItem>
+                <SelectItem value='low'>Low</SelectItem>
+                <SelectItem value='medium'>Medium</SelectItem>
+                <SelectItem value='high'>High</SelectItem>
               </SelectContent>
             </Select>
             <Popover>
