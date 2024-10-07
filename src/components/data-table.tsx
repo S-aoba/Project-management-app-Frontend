@@ -32,8 +32,8 @@ const statusList = [
     label: 'Pending',
   },
   {
-    value: 'is_progress',
-    label: 'Is_progress',
+    value: 'progress',
+    label: 'Progress',
   },
   {
     value: 'completed',
