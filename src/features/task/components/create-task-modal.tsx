@@ -69,7 +69,7 @@ export const CreateTaskModal = () => {
         onSuccess() {
           handleClose()
 
-          toast.success('Task created successfully.')
+          toast.success('Task created successfully')
         },
         onError(error) {
           console.log(error)

@@ -66,7 +66,7 @@ export const CreateProjectModal = () => {
 
           handleClose()
 
-          toast.success('Project created successfully.')
+          toast.success('Project created successfully')
         },
         onError(error) {
           const errorMessages: ValidationErrorType = JSON.parse(error.message).errors

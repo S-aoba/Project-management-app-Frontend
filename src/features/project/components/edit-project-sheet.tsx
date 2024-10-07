@@ -80,7 +80,7 @@ export const EditProjectSheet = () => {
         onSuccess() {
           handleClose()
 
-          toast.success('Project edited successfully.')
+          toast.success('Project edited successfully')
         },
         onError(error) {
           const errorMessages: ValidationErrorType = JSON.parse(error.message).errors
