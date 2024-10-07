@@ -38,13 +38,11 @@ export const Action = ({ id, projectId }: { id: number; projectId: number }) => 
       <ConfirmDialog />
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <div className='size-8 hover:bg-slate-200 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-300'>
-            <EllipsisVertical className='size-4 text-slate-400' />
+          <div className='size-8 hover:bg-accent flex items-center justify-center rounded-full cursor-pointer transition-colors duration-300'>
+            <EllipsisVertical className='size-4' />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Setting</DropdownMenuLabel>
-          <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() =>
               setOpen({
@@ -52,11 +50,11 @@ export const Action = ({ id, projectId }: { id: number; projectId: number }) => 
                 id: id,
               })
             }>
-            <EditIcon className='size-4 text-slate-400 mr-2' />
+            <EditIcon className='size-4 mr-2' />
             Edit
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleDelete}>
-            <Trash2 className='size-4 text-slate-400 mr-2' />
+            <Trash2 className='size-4 mr-2' />
             Delete
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -67,7 +65,7 @@ export const Action = ({ id, projectId }: { id: number; projectId: number }) => 
                 id: id,
               })
             }>
-            <EditIcon className='size-4 text-slate-400 mr-2' />
+            <EditIcon className='size-4 mr-2' />
             Edit Assigned User ID
           </DropdownMenuItem>
         </DropdownMenuContent>

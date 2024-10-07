@@ -63,8 +63,8 @@ export const Navigation = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <div className='p-2 hover:bg-gray-100 rounded-full hover:cursor-pointer transition-colors duration-300'>
-            <BellIcon className='size-5 text-slate-500' />
+          <div className='p-2 hover:bg-accent rounded-full hover:cursor-pointer transition-colors duration-300'>
+            <BellIcon className='size-5 text-muted-foreground' />
           </div>
         </div>
       </div>

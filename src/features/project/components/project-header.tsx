@@ -87,7 +87,7 @@ export const ProjectHeader = () => {
           <div className='flex items-center justify-between'>
             <h1 className='text-2xl text-foreground'>{data?.project.name}</h1>
             <DropdownMenu>
-              <DropdownMenuTrigger className='hover:bg-gray-100 p-2 rounded-full transition-colors duration-300'>
+              <DropdownMenuTrigger className='hover:bg-accent p-2 rounded-full transition-colors duration-300'>
                 <EllipsisVertical className='size-4' />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
