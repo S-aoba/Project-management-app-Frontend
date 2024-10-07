@@ -4,7 +4,7 @@ export const getStatusVariant = ({ status }: Pick<Task, 'status'>) => {
   switch (status) {
     case 'pending':
       return 'pending'
-    case 'is_progress':
+    case 'progress':
       return 'is_progress'
     case 'completed':
       return 'completed'
