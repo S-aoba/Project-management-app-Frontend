@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { useCsrfToken } from '@/features/auth/api/use-csrf-token'
 import { useMutation } from '@tanstack/react-query'
 import { AlertCircle } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 
 export default function PasswordResetPage() {
@@ -104,6 +105,14 @@ export default function PasswordResetPage() {
           </form>
         </CardContent>
       </Card>
+      <div className='p-4 text-end'>
+        <p className='text-sm text-foreground'>
+          Login Page {''}
+          <Link href={'/login'} className='text-blue-500 hover:underline hover:underline-offset-2'>
+            here
+          </Link>
+        </p>
+      </div>
     </div>
   )
 }
